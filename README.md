@@ -11,7 +11,7 @@ or include working with measurement units. This audience can be subsequently div
 ### Customer Profile
 - Middle / upper class individual looking for a streamlined ready-made solution to integrate into their project
 - Sex: Male
-- Age range: 30 to 50 years old
+- Age range: 25 to 50 years old
 - Education level: Advanced (Bachelor’s degree or equivalent / above)
 - Income level: $55,000 yearly and more
 - Occupation: Entrepreneur or one of the core tech team members influencing or making decisions about technologies used in their project
@@ -23,4 +23,4 @@ or include working with measurement units. This audience can be subsequently div
 
 ## Front-End
 
-![](../../Documents/fe-units.jpeg)
+![](images/fe-units.jpeg)
