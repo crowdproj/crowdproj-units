@@ -18,9 +18,17 @@ or include working with measurement units. This audience can be subsequently div
 - Marketing channels: Tech-related websites (e.g. forums and blogs), Email marketing, Influencer marketing, Word-of-Mouth marketing
 
 ## MVP
-- Measurement units (CRUD)
-- Conversion from metric system to imperial and vice versa
 
-## Front-End
+### Main Functions
+- CRUD (Create, read, update, delete) and search measurement units
+- Convert units from metric system to imperial and vice versa
 
-![](images/fe-units.jpeg)
+### Unit entity description
+1. id
+2. name
+3. description
+4. aliases
+
+## Front-End Prototype
+
+![](docs/images/fe-units.jpeg)
