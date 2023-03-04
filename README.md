@@ -19,16 +19,27 @@ or include working with measurement units. This audience can be subsequently div
 
 ## MVP
 
-### Main Functions
+### Main Functions (API Endpoints)
 - CRUD (Create, read, update, delete) and search measurement units
 - Convert units from metric system to imperial and vice versa
 
-### Unit Entity Description
+### Unit Entity Fields
 1. id
 2. name
 3. description
 4. aliases
 
+## Architecture Diagram
+
+![](docs/images/architecture/crowdproj-units-arch.drawio.png)
+## Entity Relation Diagram
+
+![](docs/images/architecture/crowdproj-ERD.drawio.png)
+
+## Integration Schema 
+
+![](docs/images/architecture/crowdproj-integration.drawio.png)
+
 ## Front-End Prototype
 
-![](docs/images/fe-units.jpeg)
+![](docs/images/frontend/fe-units.jpeg)
