@@ -23,7 +23,7 @@ or include working with measurement units. This audience can be subsequently div
 - CRUD (Create, read, update, delete) and search measurement units
 - Convert units from metric system to imperial and vice versa
 
-### Unit entity description
+### Unit Entity Description
 1. id
 2. name
 3. description
