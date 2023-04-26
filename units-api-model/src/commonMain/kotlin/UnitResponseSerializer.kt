@@ -7,33 +7,33 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import com.crowdproj.units.api.v1.models.IResponse
-import com.crowdproj.units.api.v1.responses.IResponseStrategy
+import com.crowdproj.units.api.v1.models.UnitResponse
+import com.crowdproj.units.api.v1.responses.UnitResponseStrategy
 
 
 val UnitResponseSerializer = ResponseSerializer(UnitResponseSerializerBase)
 
-private object UnitResponseSerializerBase : JsonContentPolymorphicSerializer<IResponse>(IResponse::class) {
+private object UnitResponseSerializerBase : JsonContentPolymorphicSerializer<UnitResponse>(UnitResponse::class) {
     private const val discriminator = "responseType"
 
-    override fun selectDeserializer(element: JsonElement): KSerializer<out IResponse> {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out UnitResponse> {
 
         val discriminatorValue = element.jsonObject[discriminator]?.jsonPrimitive?.content
-        return IResponseStrategy.membersByDiscriminator[discriminatorValue]?.serializer
+        return UnitResponseStrategy.membersByDiscriminator[discriminatorValue]?.serializer
             ?: throw SerializationException(
                 "Unknown value '${discriminatorValue}' in discriminator '$discriminator' " +
-                        "property of ${IResponse::class} implementation"
+                        "property of ${UnitResponse::class} implementation"
             )
     }
 }
 
-class ResponseSerializer<T : IResponse>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
+class ResponseSerializer<T : UnitResponse>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
     override fun serialize(encoder: Encoder, value: T) =
-        IResponseStrategy
+        UnitResponseStrategy
             .membersByClazz[value::class]
             ?.fillDiscriminator(value)
             ?.let { serializer.serialize(encoder, it) }
             ?: throw SerializationException(
-                "Unknown class to serialize as IResponse instance in ResponseSerializer"
+                "Unknown class to serialize as UnitResponse instance in ResponseSerializer"
             )
 }

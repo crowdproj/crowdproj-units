@@ -5,7 +5,7 @@ import com.crowdproj.units.common.MkplContext
 import com.crowdproj.units.common.models.*
 import com.crowdproj.units.mappers.exceptions.UnknownMkplCommand
 
-fun MkplContext.toTransportUnit(): IResponse = when (val cmd = command) {
+fun MkplContext.toTransportUnit(): UnitResponse = when (val cmd = command) {
     MkplCommand.CREATE -> toTransportCreate()
     MkplCommand.READ -> toTransportRead()
     MkplCommand.UPDATE -> toTransportUpdate()
@@ -47,7 +47,7 @@ fun MkplContext.toTransportSearch() = UnitSearchResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
     result = if (state == MkplState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
-    units = unitsResponse.toTransportAd()
+    units = unitsResponse.toTransportUnit()
 )
 
 fun MkplContext.toTransportSuggest() = UnitSuggestResponse(
@@ -57,7 +57,7 @@ fun MkplContext.toTransportSuggest() = UnitSuggestResponse(
     unit = unitResponse.toTransportUnit()
 )
 
-fun List<MkplUnit>.toTransportAd(): List<UnitResponseObject>? = this
+fun List<MkplUnit>.toTransportUnit(): List<UnitResponseObject>? = this
     .map { it.toTransportUnit() }
     .toList()
     .takeIf { it.isNotEmpty() }

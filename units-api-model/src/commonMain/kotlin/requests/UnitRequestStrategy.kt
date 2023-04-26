@@ -1,11 +1,11 @@
 package com.crowdproj.units.api.v1.requests
 
-import com.crowdproj.units.api.v1.IApiStrategy
-import com.crowdproj.units.api.v1.models.IRequest
+import com.crowdproj.units.api.v1.UnitApiStrategy
+import com.crowdproj.units.api.v1.models.UnitRequest
 
-sealed interface IRequestStrategy: IApiStrategy<IRequest> {
+sealed interface UnitRequestStrategy: UnitApiStrategy<UnitRequest> {
     companion object {
-        private val members: List<IRequestStrategy> = listOf(
+        private val members: List<UnitRequestStrategy> = listOf(
             CreateRequestStrategy,
             ReadRequestStrategy,
             UpdateRequestStrategy,
