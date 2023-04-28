@@ -7,33 +7,33 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import com.crowdproj.units.api.v1.models.IRequest
-import com.crowdproj.units.api.v1.requests.IRequestStrategy
+import com.crowdproj.units.api.v1.models.UnitRequest
+import com.crowdproj.units.api.v1.requests.UnitRequestStrategy
 
 
 val UnitRequestSerializer = RequestSerializer(UnitRequestSerializerBase)
 
-private object UnitRequestSerializerBase : JsonContentPolymorphicSerializer<IRequest>(IRequest::class) {
+private object UnitRequestSerializerBase : JsonContentPolymorphicSerializer<UnitRequest>(UnitRequest::class) {
     private const val discriminator = "requestType"
 
-    override fun selectDeserializer(element: JsonElement): KSerializer<out IRequest> {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out UnitRequest> {
 
         val discriminatorValue = element.jsonObject[discriminator]?.jsonPrimitive?.content
-        return IRequestStrategy.membersByDiscriminator[discriminatorValue]?.serializer
+        return UnitRequestStrategy.membersByDiscriminator[discriminatorValue]?.serializer
             ?: throw SerializationException(
                 "Unknown value '${discriminatorValue}' in discriminator '$discriminator' " +
-                        "property of ${IRequest::class} implementation"
+                        "property of ${UnitRequest::class} implementation"
             )
     }
 }
 
-class RequestSerializer<T : IRequest>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
+class RequestSerializer<T : UnitRequest>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
     override fun serialize(encoder: Encoder, value: T) =
-        IRequestStrategy
+        UnitRequestStrategy
             .membersByClazz[value::class]
             ?.fillDiscriminator(value)
             ?.let { serializer.serialize(encoder, it) }
             ?: throw SerializationException(
-                "Unknown class to serialize as IRequest instance in RequestSerializer"
+                "Unknown class to serialize as UnitRequest instance in RequestSerializer"
             )
 }

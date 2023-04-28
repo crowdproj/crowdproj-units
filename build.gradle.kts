@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm")
 }
 
-val JVM_TARGET = "11"
+val javaVersion: String by project
 
 group = "com.crowdproj.units"
 version = "0.0.1"
@@ -23,9 +23,9 @@ subprojects {
     version = rootProject.version
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = JVM_TARGET
+        kotlinOptions.jvmTarget = javaVersion
     }
     tasks.withType<KotlinJvmCompile> {
-        kotlinOptions.jvmTarget = JVM_TARGET
+        kotlinOptions.jvmTarget = javaVersion
     }
 }
