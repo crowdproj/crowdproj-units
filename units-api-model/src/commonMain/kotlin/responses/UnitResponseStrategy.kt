@@ -1,9 +1,9 @@
 package com.crowdproj.units.api.v1.responses
 
 import com.crowdproj.units.api.v1.UnitApiStrategy
-import com.crowdproj.units.api.v1.models.UnitResponse
+import com.crowdproj.units.api.v1.models.IUnitResponse
 
-sealed interface UnitResponseStrategy: UnitApiStrategy<UnitResponse> {
+sealed interface UnitResponseStrategy: UnitApiStrategy<IUnitResponse> {
     companion object {
         val members = listOf(
             CreateResponseStrategy,

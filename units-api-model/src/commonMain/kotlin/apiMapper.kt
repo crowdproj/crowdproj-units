@@ -14,35 +14,35 @@ val apiMapper = Json {
     ignoreUnknownKeys = true
 
     serializersModule = SerializersModule {
-        polymorphicDefaultSerializer(UnitRequest::class) {
+        polymorphicDefaultSerializer(IUnitRequest::class) {
             @Suppress("UNCHECKED_CAST")
             when(it) {
-                is UnitCreateRequest  ->  RequestSerializer(UnitCreateRequest.serializer()) as SerializationStrategy<UnitRequest>
-                is UnitReadRequest    ->  RequestSerializer(UnitReadRequest.serializer()) as SerializationStrategy<UnitRequest>
-                is UnitUpdateRequest  ->  RequestSerializer(UnitUpdateRequest.serializer()) as SerializationStrategy<UnitRequest>
-                is UnitDeleteRequest  ->  RequestSerializer(UnitDeleteRequest.serializer()) as SerializationStrategy<UnitRequest>
-                is UnitSearchRequest  ->  RequestSerializer(UnitSearchRequest.serializer()) as SerializationStrategy<UnitRequest>
-                is UnitSuggestRequest ->  RequestSerializer(UnitSuggestRequest.serializer()) as SerializationStrategy<UnitRequest>
+                is UnitCreateRequest  ->  RequestSerializer(UnitCreateRequest.serializer()) as SerializationStrategy<IUnitRequest>
+                is UnitReadRequest    ->  RequestSerializer(UnitReadRequest.serializer()) as SerializationStrategy<IUnitRequest>
+                is UnitUpdateRequest  ->  RequestSerializer(UnitUpdateRequest.serializer()) as SerializationStrategy<IUnitRequest>
+                is UnitDeleteRequest  ->  RequestSerializer(UnitDeleteRequest.serializer()) as SerializationStrategy<IUnitRequest>
+                is UnitSearchRequest  ->  RequestSerializer(UnitSearchRequest.serializer()) as SerializationStrategy<IUnitRequest>
+                is UnitSuggestRequest ->  RequestSerializer(UnitSuggestRequest.serializer()) as SerializationStrategy<IUnitRequest>
                 else -> null
             }
         }
-        polymorphicDefault(UnitRequest::class) {
+        polymorphicDefault(IUnitRequest::class) {
             UnitRequestSerializer
         }
-        polymorphicDefaultSerializer(UnitResponse::class) {
+        polymorphicDefaultSerializer(IUnitResponse::class) {
             @Suppress("UNCHECKED_CAST")
             when(it) {
-                is UnitCreateResponse  ->  ResponseSerializer(UnitCreateResponse.serializer()) as SerializationStrategy<UnitResponse>
-                is UnitReadResponse    ->  ResponseSerializer(UnitReadResponse.serializer()) as SerializationStrategy<UnitResponse>
-                is UnitUpdateResponse  ->  ResponseSerializer(UnitUpdateResponse.serializer()) as SerializationStrategy<UnitResponse>
-                is UnitDeleteResponse  ->  ResponseSerializer(UnitDeleteResponse.serializer()) as SerializationStrategy<UnitResponse>
-                is UnitSearchResponse  ->  ResponseSerializer(UnitSearchResponse.serializer()) as SerializationStrategy<UnitResponse>
-                is UnitSuggestResponse ->  ResponseSerializer(UnitSuggestResponse.serializer()) as SerializationStrategy<UnitResponse>
-                is UnitInitResponse    ->  ResponseSerializer(UnitInitResponse.serializer()) as SerializationStrategy<UnitResponse>
+                is UnitCreateResponse  ->  ResponseSerializer(UnitCreateResponse.serializer()) as SerializationStrategy<IUnitResponse>
+                is UnitReadResponse    ->  ResponseSerializer(UnitReadResponse.serializer()) as SerializationStrategy<IUnitResponse>
+                is UnitUpdateResponse  ->  ResponseSerializer(UnitUpdateResponse.serializer()) as SerializationStrategy<IUnitResponse>
+                is UnitDeleteResponse  ->  ResponseSerializer(UnitDeleteResponse.serializer()) as SerializationStrategy<IUnitResponse>
+                is UnitSearchResponse  ->  ResponseSerializer(UnitSearchResponse.serializer()) as SerializationStrategy<IUnitResponse>
+                is UnitSuggestResponse ->  ResponseSerializer(UnitSuggestResponse.serializer()) as SerializationStrategy<IUnitResponse>
+                is UnitInitResponse    ->  ResponseSerializer(UnitInitResponse.serializer()) as SerializationStrategy<IUnitResponse>
                 else -> null
             }
         }
-        polymorphicDefault(UnitResponse::class) {
+        polymorphicDefault(IUnitResponse::class) {
             UnitResponseSerializer
         }
 
@@ -51,4 +51,4 @@ val apiMapper = Json {
     }
 }
 
-fun Json.encodeResponse(response: UnitResponse): String = encodeToString(UnitResponseSerializer, response)
+fun Json.encodeResponse(response: IUnitResponse): String = encodeToString(UnitResponseSerializer, response)

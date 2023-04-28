@@ -30,7 +30,7 @@ dependencies {
     implementation(project(":units-common"))
 
     // API
-    implementation(project(":units-api-model")) // TO BE: crowdproj-units-api-model
+    implementation(project(":units-api-model"))
     implementation(project(":units-mappers"))
 
     // Stubs

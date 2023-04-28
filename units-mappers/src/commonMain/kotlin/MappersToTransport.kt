@@ -5,7 +5,7 @@ import com.crowdproj.units.common.MkplContext
 import com.crowdproj.units.common.models.*
 import com.crowdproj.units.mappers.exceptions.UnknownMkplCommand
 
-fun MkplContext.toTransportUnit(): UnitResponse = when (val cmd = command) {
+fun MkplContext.toTransportUnit(): IUnitResponse = when (val cmd = command) {
     MkplCommand.CREATE -> toTransportCreate()
     MkplCommand.READ -> toTransportRead()
     MkplCommand.UPDATE -> toTransportUpdate()

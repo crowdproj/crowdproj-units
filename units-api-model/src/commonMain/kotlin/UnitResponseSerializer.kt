@@ -7,33 +7,33 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import com.crowdproj.units.api.v1.models.UnitResponse
+import com.crowdproj.units.api.v1.models.IUnitResponse
 import com.crowdproj.units.api.v1.responses.UnitResponseStrategy
 
 
 val UnitResponseSerializer = ResponseSerializer(UnitResponseSerializerBase)
 
-private object UnitResponseSerializerBase : JsonContentPolymorphicSerializer<UnitResponse>(UnitResponse::class) {
+private object UnitResponseSerializerBase : JsonContentPolymorphicSerializer<IUnitResponse>(IUnitResponse::class) {
     private const val discriminator = "responseType"
 
-    override fun selectDeserializer(element: JsonElement): KSerializer<out UnitResponse> {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out IUnitResponse> {
 
         val discriminatorValue = element.jsonObject[discriminator]?.jsonPrimitive?.content
         return UnitResponseStrategy.membersByDiscriminator[discriminatorValue]?.serializer
             ?: throw SerializationException(
                 "Unknown value '${discriminatorValue}' in discriminator '$discriminator' " +
-                        "property of ${UnitResponse::class} implementation"
+                        "property of ${IUnitResponse::class} implementation"
             )
     }
 }
 
-class ResponseSerializer<T : UnitResponse>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
+class ResponseSerializer<T : IUnitResponse>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
     override fun serialize(encoder: Encoder, value: T) =
         UnitResponseStrategy
             .membersByClazz[value::class]
             ?.fillDiscriminator(value)
             ?.let { serializer.serialize(encoder, it) }
             ?: throw SerializationException(
-                "Unknown class to serialize as UnitResponse instance in ResponseSerializer"
+                "Unknown class to serialize as IUnitResponse instance in ResponseSerializer"
             )
 }

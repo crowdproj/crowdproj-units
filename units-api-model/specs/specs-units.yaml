@@ -141,7 +141,7 @@ paths:
 components:
   schemas:
 
-    UnitRequest:
+    IUnitRequest:
       type: object
       description: Parent interface for all types of requests
       properties:
@@ -180,7 +180,7 @@ components:
         - success
         - error
 
-    UnitResponse:
+    IUnitResponse:
       type: object
       description: Parent interface for all types of responses
       properties:
@@ -228,7 +228,7 @@ components:
 
     UnitInitResponse:
       allOf:
-        - $ref: '#/components/schemas/UnitResponse'
+        - $ref: '#/components/schemas/IUnitResponse'
 
     UnitCreateObject:
       allOf:
@@ -240,7 +240,7 @@ components:
 
     UnitCreateRequest:
       allOf:
-        - $ref: '#/components/schemas/UnitRequest'
+        - $ref: '#/components/schemas/IUnitRequest'
         - $ref: '#/components/schemas/UnitRequestDebug'
         - type: object
           properties:
@@ -256,7 +256,7 @@ components:
 
     UnitReadRequest:
       allOf:
-        - $ref: '#/components/schemas/UnitRequest'
+        - $ref: '#/components/schemas/IUnitRequest'
         - $ref: '#/components/schemas/UnitRequestDebug'
         - type: object
           properties:
@@ -279,7 +279,7 @@ components:
 
     UnitUpdateRequest:
       allOf:
-        - $ref: '#/components/schemas/UnitRequest'
+        - $ref: '#/components/schemas/IUnitRequest'
         - $ref: '#/components/schemas/UnitRequestDebug'
         - type: object
           properties:
@@ -297,7 +297,7 @@ components:
 
     UnitDeleteRequest:
       allOf:
-        - $ref: '#/components/schemas/UnitRequest'
+        - $ref: '#/components/schemas/IUnitRequest'
         - $ref: '#/components/schemas/UnitRequestDebug'
         - type: object
           properties:
@@ -314,7 +314,7 @@ components:
 
     UnitSearchRequest:
       allOf:
-        - $ref: '#/components/schemas/UnitRequest'
+        - $ref: '#/components/schemas/IUnitRequest'
         - $ref: '#/components/schemas/UnitRequestDebug'
         - type: object
           properties:
@@ -327,7 +327,7 @@ components:
 
     UnitSuggestRequest:
       allOf:
-        - $ref: '#/components/schemas/UnitRequest'
+        - $ref: '#/components/schemas/IUnitRequest'
         - $ref: '#/components/schemas/UnitRequestDebug'
         - type: object
           properties:
@@ -396,32 +396,32 @@ components:
 
     UnitCreateResponse:
       allOf:
-        - $ref: '#/components/schemas/UnitResponse'
+        - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseSingle'
 
     UnitReadResponse:
       allOf:
-        - $ref: '#/components/schemas/UnitResponse'
+        - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseSingle'
 
     UnitUpdateResponse:
       allOf:
-        - $ref: '#/components/schemas/UnitResponse'
+        - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseSingle'
 
     UnitDeleteResponse:
       allOf:
-        - $ref: '#/components/schemas/UnitResponse'
+        - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseSingle'
 
     UnitSearchResponse:
       allOf:
-        - $ref: '#/components/schemas/UnitResponse'
+        - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseMulti'
 
     UnitSuggestResponse:
       allOf:
-        - $ref: '#/components/schemas/UnitResponse'
+        - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseSingle'
 
     # STUBS ======================

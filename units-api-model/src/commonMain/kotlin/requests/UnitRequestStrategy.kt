@@ -1,9 +1,9 @@
 package com.crowdproj.units.api.v1.requests
 
 import com.crowdproj.units.api.v1.UnitApiStrategy
-import com.crowdproj.units.api.v1.models.UnitRequest
+import com.crowdproj.units.api.v1.models.IUnitRequest
 
-sealed interface UnitRequestStrategy: UnitApiStrategy<UnitRequest> {
+sealed interface UnitRequestStrategy: UnitApiStrategy<IUnitRequest> {
     companion object {
         private val members: List<UnitRequestStrategy> = listOf(
             CreateRequestStrategy,

@@ -7,33 +7,33 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import com.crowdproj.units.api.v1.models.UnitRequest
+import com.crowdproj.units.api.v1.models.IUnitRequest
 import com.crowdproj.units.api.v1.requests.UnitRequestStrategy
 
 
 val UnitRequestSerializer = RequestSerializer(UnitRequestSerializerBase)
 
-private object UnitRequestSerializerBase : JsonContentPolymorphicSerializer<UnitRequest>(UnitRequest::class) {
+private object UnitRequestSerializerBase : JsonContentPolymorphicSerializer<IUnitRequest>(IUnitRequest::class) {
     private const val discriminator = "requestType"
 
-    override fun selectDeserializer(element: JsonElement): KSerializer<out UnitRequest> {
+    override fun selectDeserializer(element: JsonElement): KSerializer<out IUnitRequest> {
 
         val discriminatorValue = element.jsonObject[discriminator]?.jsonPrimitive?.content
         return UnitRequestStrategy.membersByDiscriminator[discriminatorValue]?.serializer
             ?: throw SerializationException(
                 "Unknown value '${discriminatorValue}' in discriminator '$discriminator' " +
-                        "property of ${UnitRequest::class} implementation"
+                        "property of ${IUnitRequest::class} implementation"
             )
     }
 }
 
-class RequestSerializer<T : UnitRequest>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
+class RequestSerializer<T : IUnitRequest>(private val serializer: KSerializer<T>) : KSerializer<T> by serializer {
     override fun serialize(encoder: Encoder, value: T) =
         UnitRequestStrategy
             .membersByClazz[value::class]
             ?.fillDiscriminator(value)
             ?.let { serializer.serialize(encoder, it) }
             ?: throw SerializationException(
-                "Unknown class to serialize as UnitRequest instance in RequestSerializer"
+                "Unknown class to serialize as IUnitRequest instance in RequestSerializer"
             )
 }

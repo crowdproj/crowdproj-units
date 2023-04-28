@@ -6,7 +6,7 @@ import com.crowdproj.units.common.models.*
 import com.crowdproj.units.common.stubs.MkplStubs
 import com.crowdproj.units.mappers.exceptions.UnknownRequestClass
 
-fun MkplContext.fromTransport(request: UnitRequest) = when (request) {
+fun MkplContext.fromTransport(request: IUnitRequest) = when (request) {
     is UnitCreateRequest -> fromTransport(request)
     is UnitReadRequest -> fromTransport(request)
     is UnitUpdateRequest -> fromTransport(request)
@@ -18,7 +18,7 @@ fun MkplContext.fromTransport(request: UnitRequest) = when (request) {
 
 private fun String?.toUnitId() = this?.let { MkplUnitId(it) } ?: MkplUnitId.NONE
 private fun String?.toUnitWithId() = MkplUnit(id = this.toUnitId())
-private fun UnitRequest?.requestId() = this?.requestId?.let { MkplRequestId(it) } ?: MkplRequestId.NONE
+private fun IUnitRequest?.requestId() = this?.requestId?.let { MkplRequestId(it) } ?: MkplRequestId.NONE
 
 private fun UnitDebug?.transportToWorkMode(): MkplWorkMode = when (this?.mode) {
     UnitRequestDebugMode.PROD -> MkplWorkMode.PROD
