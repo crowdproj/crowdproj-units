@@ -1,0 +1,458 @@
+openapi: 3.0.4
+info:
+  title: Units
+  description: A microservice providing Units of measurements to other services
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: unit
+    description: A unit of measurement
+paths:
+  /unit/create:
+    post:
+      tags:
+        - unit
+      summary: Create a unit
+      operationId: unitCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitCreateResponse'
+
+  /unit/read:
+    post:
+      tags:
+        - unit
+      summary: Read a unit
+      operationId: unitRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitReadResponse'
+
+  /unit/update:
+    post:
+      tags:
+        - unit
+      summary: Update a unit
+      operationId: unitUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitUpdateResponse'
+
+  /unit/delete:
+    post:
+      tags:
+        - unit
+      summary: Delete a unit
+      operationId: unitDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitDeleteResponse'
+
+  /unit/search:
+    post:
+      tags:
+        - unit
+      summary: Search a unit
+      operationId: unitSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitSearchResponse'
+
+  /unit/suggest:
+    post:
+      tags:
+        - unit
+      summary: Suggest a unit
+      operationId: unitSuggest
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitSuggestRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitSuggestResponse'
+
+components:
+  schemas:
+
+    IUnitRequest:
+      type: object
+      description: Parent interface for all types of requests
+      properties:
+        requestType:
+          type: string
+          description: Discriminator field to recognize the request type
+          example: create
+        requestId:
+          type: string
+          description: Request id for debugging purposes
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/UnitCreateRequest'
+          read: '#/components/schemas/UnitReadRequest'
+          update: '#/components/schemas/UnitUpdateRequest'
+          delete: '#/components/schemas/UnitDeleteRequest'
+          search: '#/components/schemas/UnitSearchRequest'
+          suggest: '#/components/schemas/UnitSuggestRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IUnitResponse:
+      type: object
+      description: Parent interface for all types of responses
+      properties:
+        responseType:
+          type: string
+          description: Discriminator field to recognize the response type
+          example: create
+        requestId:
+          type: string
+          description: Request id for debugging purposes
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/UnitCreateResponse'
+          read: '#/components/schemas/UnitReadResponse'
+          update: '#/components/schemas/UnitUpdateResponse'
+          delete: '#/components/schemas/UnitDeleteResponse'
+          search: '#/components/schemas/UnitSearchResponse'
+          suggest: '#/components/schemas/UnitSuggestResponse'
+          init: '#/components/schemas/UnitInitResponse'
+
+    UnitId:
+      type: string
+    UnitLock:
+      type: string
+      description: Optimistic locking version
+
+
+    BaseUnit:
+      type: object
+      description: Common properties for create, update and suggest
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        alias:
+          type: string
+
+    UnitInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+
+    UnitCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseUnit'
+        - type: object
+          properties:
+            status:
+              $ref: '#/components/schemas/UnitStatus'
+
+    UnitCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - type: object
+          properties:
+            unit:
+              $ref: '#/components/schemas/UnitCreateObject'
+
+    UnitReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UnitId'
+
+    UnitReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - type: object
+          properties:
+            unit:
+              $ref: '#/components/schemas/UnitReadObject'
+
+    UnitUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseUnit'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UnitId'
+            lock:
+              $ref: '#/components/schemas/UnitLock'
+            status:
+              $ref: '#/components/schemas/UnitStatus'
+            systemUnitId:
+              $ref: '#/components/schemas/SystemUnitId'
+
+    UnitUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - type: object
+          properties:
+            unit:
+              $ref: '#/components/schemas/UnitUpdateObject'
+
+    UnitDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UnitId'
+            lock:
+              $ref: '#/components/schemas/UnitLock'
+
+    UnitDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - type: object
+          properties:
+            unit:
+              $ref: '#/components/schemas/UnitDeleteObject'
+
+    UnitSearchFilter:
+      type: object
+      description: Search filters
+      properties:
+        searchString:
+          type: string
+          description: Search string to use in unit search
+
+    UnitSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - type: object
+          properties:
+            unitFilter:
+             $ref: '#/components/schemas/UnitSearchFilter'
+
+    UnitSuggestObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseUnit'
+
+    UnitSuggestRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - type: object
+          properties:
+            unit:
+              $ref: '#/components/schemas/UnitSuggestObject'
+
+    UnitResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseUnit'
+        - type: object
+          description: Backend response object
+          properties:
+            id:
+              $ref: '#/components/schemas/UnitId'
+            lock:
+              $ref: '#/components/schemas/UnitLock'
+            systemUnitId:
+              $ref: '#/components/schemas/SystemUnitId'
+            status:
+              $ref: '#/components/schemas/UnitStatus'
+    #           conversionFormulas:
+    #             type: array
+    #             uniqueItems: true
+    #             items:
+    #               $ref: '#/components/schemas/UnitConversionFormulas'
+    #              uniqueItems: true
+    #              items:
+
+    SystemUnitId:
+      type: string
+      description: Unit system id used for conversion
+
+    UnitConversionFormulas:
+      type: string
+      description: x and y constants to convert into UnitSystem
+      enum:
+        - x
+        - y
+
+    UnitStatus:
+      type: string
+      enum:
+        - suggested
+        - confirmed
+        - deprecated
+        - deleted
+        - none
+
+    UnitResponseSingle:
+      allOf:
+        - type: object
+          description: Response containing a single unit object
+          properties:
+            unit:
+              $ref: '#/components/schemas/UnitResponseObject'
+
+    UnitResponseMulti:
+      allOf:
+        - type: object
+          description: Response containing a list of unit objects
+          properties:
+            units:
+              type: array
+              items:
+                $ref: '#/components/schemas/UnitResponseObject'
+
+    UnitCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseMulti'
+
+    UnitSuggestResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    # STUBS ======================
+    UnitRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    UnitRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/UnitDebug'
+
+    UnitDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/UnitRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/UnitRequestDebugStubs'
+
+    UnitRequestDebugStubs:
+      type: string
+      description: All the possible debug stubs
+      enum:
+        - success
+        - notFound
+        - cannotDelete
+        - badId
+        - badSearchString
+        - badSuggestString
