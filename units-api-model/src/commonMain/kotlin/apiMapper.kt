@@ -52,3 +52,13 @@ val apiMapper = Json {
 }
 
 fun Json.encodeResponse(response: IUnitResponse): String = encodeToString(UnitResponseSerializer, response)
+
+fun apiV1ResponseSerialize(Response: IUnitResponse): String = apiMapper.encodeToString(UnitResponseSerializer, Response)
+
+@Suppress("UNCHECKED_CAST")
+fun <T : Any> apiV1ResponseDeserialize(json: String): T = apiMapper.decodeFromString(UnitResponseSerializer, json) as T
+
+fun apiV1RequestSerialize(request: IUnitRequest): String = apiMapper.encodeToString(UnitRequestSerializer, request)
+
+@Suppress("UNCHECKED_CAST")
+fun <T : Any> apiV1RequestDeserialize(json: String): T = apiMapper.decodeFromString(UnitRequestSerializer, json) as T
