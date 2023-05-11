@@ -12,6 +12,6 @@
 4. Created at (date of creation)
 5. Updated at (date of update)
 6. Deleted at (date of soft deletion)
-7. A, B, C, D constants to convert into base UnitSystem _(AX + B) / (CX + D)_
+7. A, B constants to convert into base UnitSystem _AX + B_
 8. System Unit ID (some base system-wide unit)
 9. Status (suggested, confirmed, deprecated, deleted)

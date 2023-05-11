@@ -11,9 +11,9 @@ class RequestSerializationTest {
     private val createRequest = UnitCreateRequest(
         requestType = "create",
         requestId = "1",
-        debug = UnitDebug(
-            mode = UnitRequestDebugMode.STUB,
-            stub = UnitRequestDebugStubs.BAD_ID
+        debug = CpBaseDebug(
+            mode = CpRequestDebugMode.STUB,
+            stub = CpRequestDebugStubs.BAD_ID
         ),
         params = UnitCreateParams(
             unit = "kg",
@@ -27,9 +27,9 @@ class RequestSerializationTest {
     private val searchRequest = UnitSearchRequest(
         requestType = "search",
         requestId = "2",
-        debug = UnitDebug(
-            mode = UnitRequestDebugMode.STUB,
-            stub = UnitRequestDebugStubs.SUCCESS
+        debug = CpBaseDebug(
+            mode = CpRequestDebugMode.STUB,
+            stub = CpRequestDebugStubs.SUCCESS
         ),
         params = UnitSearchParams(
             unitFilter = UnitSearchFilter(
@@ -47,7 +47,7 @@ class RequestSerializationTest {
         assertContains(json, Regex("\"description\":\\s*\"unit of mass in the International System of Units\""))
         assertContains(json, Regex("\"status\":\\s*\"${UnitStatus.CONFIRMED}\""))
         assertContains(json, Regex("\"mode\":\\s*\"stub\""))
-        assertContains(json, Regex("\"conversion\":\\s*\\{\"A\":1.0,\"B\":0.0,\"C\":1.0,\"D\":0.0}"))
+        assertContains(json, Regex("\"conversion\":\\s*\\{\"A\":1.0,\"B\":0.0}"))
         assertContains(json, Regex("\"stub\":\\s*\"badId\""))
         assertContains(json, Regex("\"requestType\":\\s*\"create\""))
     }
