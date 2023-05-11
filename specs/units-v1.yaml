@@ -1,0 +1,518 @@
+openapi: 3.0.3
+info:
+  title: crowdproj-units
+  description: 'Microservice for management and provisioning of the Units'
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: unit
+    description: 'unit of measure'
+
+paths:
+  /unit/create:
+    post:
+      tags:
+        - unit
+      summary: Create unit
+      operationId: UnitCreate
+      requestBody:
+        description: 'Request body'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitCreateRequest'
+        required: true
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitCreateResponse'
+
+  /unit/read:
+    post:
+      tags:
+        - unit
+      summary: Read unit
+      operationId: UnitRead
+      requestBody:
+        description: 'Request body'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitReadRequest'
+        required: true
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitReadResponse'
+
+  /unit/update:
+    post:
+      tags:
+        - unit
+      summary: Update unit
+      operationId: UnitUpdate
+      requestBody:
+        description: 'Request body'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitUpdateResponse'
+
+  /unit/delete:
+    post:
+      tags:
+        - unit
+      summary: Delete unit
+      operationId: UnitDelete
+      requestBody:
+        description: 'Request body'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitDeleteResponse'
+
+  /unit/search:
+    post:
+      tags:
+        - unit
+      summary: Search unit by name, description
+      operationId: UnitSearch
+      requestBody:
+        description: 'Request body'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnitSearchRequest'
+        required: true
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitSearchResponse'
+
+components:
+  schemas:
+
+    # REQUESTS  ======================
+
+
+    UnitCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '#/components/schemas/UnitCreateParamsObj'
+
+    UnitReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '#/components/schemas/UnitReadParamsObj'
+
+    UnitUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '#/components/schemas/UnitUpdateParamsObj'
+
+    UnitDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '#/components/schemas/UnitDeleteParamsObj'
+
+
+    UnitSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IUnitRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '#/components/schemas/UnitSearchParamsObj'
+
+
+    # RESPONSES  ======================
+
+
+    UnitCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseSingle'
+
+    UnitSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IUnitResponse'
+        - $ref: '#/components/schemas/UnitResponseMulti'
+
+
+    # REQUEST PARAMS  ======================
+
+    UnitCreateParamsObj:
+      type: object
+      required:
+        - params
+      properties:
+        params:
+          title: 'UnitCreateParams'
+          allOf:
+            - $ref: '#/components/schemas/BaseUnit'
+
+    UnitReadParamsObj:
+      type: object
+      required:
+        - params
+      properties:
+        params:
+          title: 'UnitReadParams'
+          type: object
+          required:
+            - unitId
+          properties:
+            unitId:
+              $ref: '#/components/schemas/UnitId'
+
+    UnitUpdateParamsObj:
+      type: object
+      required:
+        - params
+      properties:
+        params:
+          title: 'UnitUpdateParams'
+          allOf:
+            - type: object
+              required:
+                - id
+              properties:
+                id:
+                  $ref: '#/components/schemas/UnitId'
+            - $ref: '#/components/schemas/BaseUnit'
+
+    UnitDeleteParamsObj:
+      type: object
+      required:
+        - params
+      properties:
+        params:
+          title: 'UnitDeleteParams'
+          type: object
+          required:
+            - unitId
+          properties:
+            unitId:
+              $ref: '#/components/schemas/UnitId'
+
+    UnitSearchParamsObj:
+      type: object
+      required:
+        - params
+      properties:
+        params:
+          title: 'UnitSearchParams'
+          type: object
+          required:
+            - unitFilter
+          properties:
+            unitFilter:
+              $ref: '#/components/schemas/UnitSearchFilter'
+
+
+    # RESPONSE OBJECTS  ======================
+
+
+    UnitResponseObject:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: '#/components/schemas/UnitId'
+        - $ref: '#/components/schemas/BaseUnit'
+
+    UnitResponseSingle:
+        type: object
+        description: 'Response with one unit'
+        required:
+          - unit
+        properties:
+          unit:
+            $ref: '#/components/schemas/UnitResponseObject'
+
+    UnitResponseMulti:
+      type: object
+      description: 'Response with list of units'
+      required:
+        - units
+      properties:
+        units:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitResponseObject'
+
+
+    # COMMON TRANSFER OBJECTS ======================
+
+
+    UnitId:
+      description: 'Unit identification'
+      type: string
+      example: '1000'
+
+    SystemUnitId:
+      description: 'ID of system unit'
+      $ref: '#/components/schemas/UnitId'
+
+    UnitAlias:
+      description: 'Unit alias'
+      type: string
+      minLength: 3
+      example: 'Kilogram'
+
+    UnitStatus:
+      description: 'Status of unit'
+      type: string
+      enum:
+        - suggested
+        - confirmed
+        - deprecated
+        - deleted
+      default: 'suggested'
+
+    UnitDescription:
+      description: 'description of unit'
+      type: string
+      minLength: 3
+      example: 'Unit of mass'
+
+    UnitConversionParameters:
+      description: 'Parameters for converting a unit to a system one using the formula: (AX + B)/(CX + D)'
+      type: object
+      required:
+        - A
+        - B
+        - C
+        - D
+      properties:
+        A:
+          type: number
+          format: double
+          default: 1.0
+        B:
+          type: number
+          format: double
+          default: 0.0
+        C:
+          type: number
+          format: double
+          default: 1.0
+        D:
+          type: number
+          format: double
+          default: 0.0
+
+    BaseUnit:
+      description: 'Object describes properties that are the same for create and update'
+      type: object
+      required:
+        - alias
+        - unit
+        - conversion
+        - status
+      properties:
+        alias:
+          $ref: '#/components/schemas/UnitAlias'
+        unit:
+          description: 'unit of measure'
+          type: string
+          example: 'Kg'
+        conversion:
+          $ref: '#/components/schemas/UnitConversionParameters'
+        status:
+          $ref: '#/components/schemas/UnitStatus'
+        description:
+          $ref: '#/components/schemas/UnitDescription'
+          nullable: true
+        systemUnitId:
+          $ref: '#/components/schemas/SystemUnitId'
+          nullable: true
+
+    UnitSearchFilter:
+      description: 'filters for Unit search'
+      type: object
+      required:
+        - search
+      properties:
+        search:
+          description: 'String to search for all string parameters'
+          minLength: 3
+          type: string
+
+
+    # STUBS ======================
+
+
+    UnitRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/UnitDebug'
+
+    UnitDebug:
+      type: object
+      required:
+        - mode
+        - stub
+      properties:
+        mode:
+          $ref: '#/components/schemas/UnitRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/UnitRequestDebugStubs'
+
+    UnitRequestDebugMode:
+      type: string
+      example: 'prod'
+      enum:
+        - prod
+        - test
+        - stub
+
+    UnitRequestDebugStubs:
+      description: 'Enumerations of all stubs'
+      type: string
+      example: 'success'
+      enum:
+        - success
+        - notFound
+        - cannotDelete
+        - badId
+        - badUnitId
+        - badSystemUnitId
+        - badAlias
+        - badDescription
+        - badConversionParameters
+        - badSearchString
+
+
+    # BASIC OBJECTS ======================
+
+
+    IUnitRequest:
+      description: 'Base interface for all requests'
+      type: object
+      properties:
+        requestType:
+          description: 'Field for calculation request type'
+          type: string
+          example: 'create'
+        requestId:
+          description: 'An identification of debugs response'
+          type: string
+          example: '123e4567-e89b-12d3-a456-426614174000'
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/UnitCreateRequest'
+          read: '#/components/schemas/UnitReadRequest'
+          update: '#/components/schemas/UnitUpdateRequest'
+          delete: '#/components/schemas/UnitDeleteRequest'
+          search: '#/components/schemas/UnitSearchRequest'
+
+    IUnitResponse:
+      description: 'Basic interface for all responses'
+      type: object
+      required:
+        - result
+      properties:
+        responseType:
+          description: 'Field for calculation response type'
+          type: string
+          example: 'create'
+        requestId:
+          description: 'An identification of debugs response'
+          type: string
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/UnitCreateResponse'
+          read: '#/components/schemas/UnitReadResponse'
+          update: '#/components/schemas/UnitUpdateResponse'
+          delete: '#/components/schemas/UnitDeleteResponse'
+          search: '#/components/schemas/UnitSearchResponse'
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          description: 'Some specific code to identify an error for programming handling purposes'
+          type: string
+          example: '1234'
+        message:
+          description: 'A full description of the error with a complete information'
+          type: string
+          example: 'Too long string'
+        group:
+          description: 'An optional group id to segment different errors'
+          type: string
+          example: 'Business'
+        field:
+          description: 'An optional field the error relates to'
+          type: string
+          example: 'alias'
+
+    ResponseResult:
+      description: 'General template for a response structure. Has two options: success and error'
+      type: string
+      enum:
+        - success
+        - error
+      default: 'success'
