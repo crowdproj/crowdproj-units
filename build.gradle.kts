@@ -1,10 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform") apply false
+    kotlin("jvm") apply false
 }
 
-group = "ru.otus.otuskotlin.marketplace.units"
+val JVM_TARGET = "11"
+
+group = "com.crowdproj.marketplace.units"
 version = "0.0.1-SNAPSHOT"
 
 allprojects {
@@ -20,6 +24,9 @@ subprojects {
     version = rootProject.version
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = JVM_TARGET
+    }
+    tasks.withType<KotlinJvmCompile> {
+        kotlinOptions.jvmTarget = JVM_TARGET
     }
 }
