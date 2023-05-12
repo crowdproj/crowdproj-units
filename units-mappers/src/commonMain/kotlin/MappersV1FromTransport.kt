@@ -18,24 +18,17 @@ fun UntsContext.fromTransport(request: IUnitRequest) = when (request) {
 private fun String?.toUnitId() = this?.let { UntsUnitId(it) } ?: UntsUnitId.NONE
 private fun IUnitRequest?.requestId() = this?.requestId?.let { UntsRequestId(it) } ?: UntsRequestId.NONE
 
-private fun UnitDebug?.transportToWorkMode(): UntsWorkMode = when (this?.mode) {
-    UnitRequestDebugMode.PROD -> UntsWorkMode.PROD
-    UnitRequestDebugMode.TEST -> UntsWorkMode.TEST
-    UnitRequestDebugMode.STUB -> UntsWorkMode.STUB
+private fun CpBaseDebug?.transportToWorkMode(): UntsWorkMode = when (this?.mode) {
+    CpRequestDebugMode.PROD -> UntsWorkMode.PROD
+    CpRequestDebugMode.TEST -> UntsWorkMode.TEST
+    CpRequestDebugMode.STUB -> UntsWorkMode.STUB
     null -> UntsWorkMode.PROD
 }
 
-private fun UnitDebug?.transportToStubCase(): UntsStubs = when (this?.stub) {
-    UnitRequestDebugStubs.SUCCESS -> UntsStubs.SUCCESS
-    UnitRequestDebugStubs.NOT_FOUND -> UntsStubs.NOT_FOUND
-    UnitRequestDebugStubs.CANNOT_DELETE -> UntsStubs.CANNOT_DELETE
-    UnitRequestDebugStubs.BAD_ID -> UntsStubs.BAD_ID
-    UnitRequestDebugStubs.BAD_UNIT_ID -> UntsStubs.BAD_UNIT_ID
-    UnitRequestDebugStubs.BAD_SYSTEM_UNIT_ID -> UntsStubs.BAD_SYSTEM_UNIT_ID
-    UnitRequestDebugStubs.BAD_ALIAS -> UntsStubs.BAD_ALIAS
-    UnitRequestDebugStubs.BAD_DESCRIPTION -> UntsStubs.BAD_DESCRIPTION
-    UnitRequestDebugStubs.BAD_CONVERSION_PARAMETERS -> UntsStubs.BAD_CONVERSION_PARAMETERS
-    UnitRequestDebugStubs.BAD_SEARCH_STRING -> UntsStubs.BAD_SEARCH_STRING
+private fun CpBaseDebug?.transportToStubCase(): UntsStubs = when (this?.stub) {
+    CpRequestDebugStubs.SUCCESS -> UntsStubs.SUCCESS
+    CpRequestDebugStubs.NOT_FOUND -> UntsStubs.NOT_FOUND
+    CpRequestDebugStubs.BAD_ID -> UntsStubs.BAD_ID
     null -> UntsStubs.NONE
 }
 
@@ -114,8 +107,6 @@ private fun UnitSearchParams.toInternal(): UntsUnitFilter = UntsUnitFilter(
 private fun UnitConversionParameters.fromTransport(): UntsConversionParameters = UntsConversionParameters(
     A = this.A,
     B = this.B,
-    C = this.C,
-    D = this.D
 )
 
 private fun UnitStatus.fromTransport(): UntsUnitStatus = when (this) {
@@ -123,5 +114,4 @@ private fun UnitStatus.fromTransport(): UntsUnitStatus = when (this) {
     UnitStatus.CONFIRMED -> UntsUnitStatus.CONFIRMED
     UnitStatus.DEPRECATED -> UntsUnitStatus.DEPRECATED
     UnitStatus.DELETED -> UntsUnitStatus.DELETED
-    null -> UntsUnitStatus.NONE
 }

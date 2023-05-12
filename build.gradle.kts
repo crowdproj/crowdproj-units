@@ -30,3 +30,10 @@ subprojects {
         kotlinOptions.jvmTarget = JVM_TARGET
     }
 }
+
+tasks {
+    @Suppress("UNUSED_VARIABLE")
+    val deploy: Task by creating {
+        dependsOn("build")
+    }
+}

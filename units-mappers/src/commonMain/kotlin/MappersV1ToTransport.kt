@@ -78,12 +78,13 @@ private fun List<UntsError>.toTransportErrors(): List<Error>? = this
     .takeIf { it.isNotEmpty() }
 
 private fun UntsError.toTransport() = Error(
-    code = code,
-    message = message,
+    code = code.takeIf { it.isNotBlank() },
+    title = title.takeIf { it.isNotBlank() },
+    description = description.takeIf { it.isNotBlank() },
     group = group.takeIf { it.isNotBlank() },
     field = field.takeIf { it.isNotBlank() },
 )
 
 private fun UntsConversionParameters.toTransport() = UnitConversionParameters(
-    A, B, C, D
+    A, B
 )

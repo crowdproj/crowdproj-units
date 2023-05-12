@@ -121,38 +121,39 @@ paths:
 components:
   schemas:
 
+
     # REQUESTS  ======================
 
 
     UnitCreateRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../units-api/build/base.yaml#/components/schemas/CpRequestDebug'
         - $ref: '#/components/schemas/UnitCreateParamsObj'
 
     UnitReadRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../units-api/build/base.yaml#/components/schemas/CpRequestDebug'
         - $ref: '#/components/schemas/UnitReadParamsObj'
 
     UnitUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../units-api/build/base.yaml#/components/schemas/CpRequestDebug'
         - $ref: '#/components/schemas/UnitUpdateParamsObj'
 
     UnitDeleteRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../units-api/build/base.yaml#/components/schemas/CpRequestDebug'
         - $ref: '#/components/schemas/UnitDeleteParamsObj'
 
 
     UnitSearchRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../units-api/build/base.yaml#/components/schemas/CpRequestDebug'
         - $ref: '#/components/schemas/UnitSearchParamsObj'
 
 
@@ -186,6 +187,7 @@ components:
 
 
     # REQUEST PARAMS  ======================
+
 
     UnitCreateParamsObj:
       type: object
@@ -325,27 +327,17 @@ components:
       example: 'Unit of mass'
 
     UnitConversionParameters:
-      description: 'Parameters for converting a unit to a system one using the formula: (AX + B)/(CX + D)'
+      description: 'Parameters for converting a unit to a system one using the formula: AX + B'
       type: object
       required:
         - A
         - B
-        - C
-        - D
       properties:
         A:
           type: number
           format: double
           default: 1.0
         B:
-          type: number
-          format: double
-          default: 0.0
-        C:
-          type: number
-          format: double
-          default: 1.0
-        D:
           type: number
           format: double
           default: 0.0
@@ -388,131 +380,35 @@ components:
           type: string
 
 
-    # STUBS ======================
-
-
-    UnitRequestDebug:
-      type: object
-      properties:
-        debug:
-          $ref: '#/components/schemas/UnitDebug'
-
-    UnitDebug:
-      type: object
-      required:
-        - mode
-        - stub
-      properties:
-        mode:
-          $ref: '#/components/schemas/UnitRequestDebugMode'
-        stub:
-          $ref: '#/components/schemas/UnitRequestDebugStubs'
-
-    UnitRequestDebugMode:
-      type: string
-      example: 'prod'
-      enum:
-        - prod
-        - test
-        - stub
-
-    UnitRequestDebugStubs:
-      description: 'Enumerations of all stubs'
-      type: string
-      example: 'success'
-      enum:
-        - success
-        - notFound
-        - cannotDelete
-        - badId
-        - badUnitId
-        - badSystemUnitId
-        - badAlias
-        - badDescription
-        - badConversionParameters
-        - badSearchString
-
-
     # BASIC OBJECTS ======================
 
 
     IUnitRequest:
-      description: 'Base interface for all requests'
-      type: object
-      properties:
-        requestType:
-          description: 'Field for calculation request type'
-          type: string
-          example: 'create'
-        requestId:
-          description: 'An identification of debugs response'
-          type: string
-          example: '123e4567-e89b-12d3-a456-426614174000'
-      discriminator:
-        propertyName: requestType
-        mapping:
-          create: '#/components/schemas/UnitCreateRequest'
-          read: '#/components/schemas/UnitReadRequest'
-          update: '#/components/schemas/UnitUpdateRequest'
-          delete: '#/components/schemas/UnitDeleteRequest'
-          search: '#/components/schemas/UnitSearchRequest'
+      allOf:
+        - type: object
+          properties:
+            requestId:
+              $ref: '../units-api/build/base.yaml#/components/schemas/RequestId'
+        - $ref: '../units-api/build/base.yaml#/components/schemas/IRequest'
+        - type: object
+          discriminator:
+            propertyName: requestType
+            mapping:
+              create: '#/components/schemas/UnitCreateRequest'
+              read: '#/components/schemas/UnitReadRequest'
+              update: '#/components/schemas/UnitUpdateRequest'
+              delete: '#/components/schemas/UnitDeleteRequest'
+              search: '#/components/schemas/UnitSearchRequest'
 
     IUnitResponse:
-      description: 'Basic interface for all responses'
-      type: object
-      required:
-        - result
-      properties:
-        responseType:
-          description: 'Field for calculation response type'
-          type: string
-          example: 'create'
-        requestId:
-          description: 'An identification of debugs response'
-          type: string
-          example: '123e4567-e89b-12d3-a456-426614174000'
-        result:
-          $ref: '#/components/schemas/ResponseResult'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-      discriminator:
-        propertyName: responseType
-        mapping:
-          create: '#/components/schemas/UnitCreateResponse'
-          read: '#/components/schemas/UnitReadResponse'
-          update: '#/components/schemas/UnitUpdateResponse'
-          delete: '#/components/schemas/UnitDeleteResponse'
-          search: '#/components/schemas/UnitSearchResponse'
-
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          description: 'Some specific code to identify an error for programming handling purposes'
-          type: string
-          example: '1234'
-        message:
-          description: 'A full description of the error with a complete information'
-          type: string
-          example: 'Too long string'
-        group:
-          description: 'An optional group id to segment different errors'
-          type: string
-          example: 'Business'
-        field:
-          description: 'An optional field the error relates to'
-          type: string
-          example: 'alias'
-
-    ResponseResult:
-      description: 'General template for a response structure. Has two options: success and error'
-      type: string
-      enum:
-        - success
-        - error
-      default: 'success'
+      allOf:
+        - $ref: '../units-api/build/base.yaml#/components/schemas/IResponse'
+        - type: object
+          discriminator:
+            propertyName: responseType
+            mapping:
+              create: '#/components/schemas/UnitCreateResponse'
+              read: '#/components/schemas/UnitReadResponse'
+              update: '#/components/schemas/UnitUpdateResponse'
+              delete: '#/components/schemas/UnitDeleteResponse'
+              search: '#/components/schemas/UnitSearchResponse'

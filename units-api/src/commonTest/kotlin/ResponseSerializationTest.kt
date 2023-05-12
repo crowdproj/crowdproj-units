@@ -29,7 +29,7 @@ class ResponseSerializationTest {
         assertContains(json, Regex("\"alias\":\\s*\"gram\""))
         assertContains(json, Regex("\"description\":\\s*\"unit of mass\""))
         assertContains(json, Regex("\"status\":\\s*\"${UnitStatus.CONFIRMED}\""))
-        assertContains(json, Regex("\"conversion\":\\s*\\{\"A\":1.0,\"B\":0.0,\"C\":1.0,\"D\":0.0}"))
+        assertContains(json, Regex("\"conversion\":\\s*\\{\"A\":1.0,\"B\":0.0}"))
         assertContains(json, Regex("\"responseType\":\\s*\"create\""))
     }
 

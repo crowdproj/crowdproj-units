@@ -12,9 +12,9 @@ class MapperTest {
     fun fromTransport() {
         val req = UnitCreateRequest(
             requestId = "1234",
-            debug = UnitDebug(
-                mode = UnitRequestDebugMode.STUB,
-                stub = UnitRequestDebugStubs.SUCCESS
+            debug = CpBaseDebug(
+                mode = CpRequestDebugMode.STUB,
+                stub = CpRequestDebugStubs.SUCCESS
             ),
             params = UnitCreateParams(
                 unit = "name",
@@ -57,7 +57,7 @@ class MapperTest {
                     code = "err",
                     group = "request",
                     field = "name",
-                    message = "wrong name",
+                    title = "wrong name",
                 )
             ),
             state = UntsState.RUNNING,
@@ -76,6 +76,6 @@ class MapperTest {
         assertEquals("err", req.errors?.firstOrNull()?.code)
         assertEquals("request", req.errors?.firstOrNull()?.group)
         assertEquals("name", req.errors?.firstOrNull()?.field)
-        assertEquals("wrong name", req.errors?.firstOrNull()?.message)
+        assertEquals("wrong name", req.errors?.firstOrNull()?.title)
     }
 }
