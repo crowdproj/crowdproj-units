@@ -15,6 +15,8 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
+                val kotlinCorVersion: String by project
+                implementation("com.crowdproj:kotlin-cor:$kotlinCorVersion")
                 implementation(kotlin("stdlib-common"))
 
                 implementation(project(":units-common"))

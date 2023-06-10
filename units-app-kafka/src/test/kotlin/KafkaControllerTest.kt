@@ -40,9 +40,9 @@ class KafkaControllerTest {
                             description = "some test unit to check them all",
                             status = UnitStatus.SUGGESTED
                         ),
-                        debug = UnitDebug(
-                            mode = UnitRequestDebugMode.STUB,
-                            stub = UnitRequestDebugStubs.SUCCESS
+                        debug = CpBaseDebug(
+                            mode = CpRequestDebugMode.STUB,
+                            stub = CpRequestDebugStubs.SUCCESS
                         )
                     )
                     )
@@ -63,7 +63,7 @@ class KafkaControllerTest {
         val result = apiV1ResponseDeserialize<UnitCreateResponse>(message.value())
         assertEquals(outputTopic, message.topic())
         assertEquals("11111111-1111-1111-1111-111111111111", result.requestId)
-        assertEquals("Ampere", result.unit?.name)
+        assertEquals("Test Unit", result.unit?.name)
     }
 
     companion object {

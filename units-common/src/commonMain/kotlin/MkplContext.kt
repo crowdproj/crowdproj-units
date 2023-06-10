@@ -8,6 +8,7 @@ data class MkplContext(
     var command: MkplCommand = MkplCommand.NONE,
     var state: MkplState = MkplState.NONE,
     val errors: MutableList<MkplError> = mutableListOf(),
+    var settings: MkplCorSettings = MkplCorSettings.NONE,
 
     var workMode: MkplWorkMode = MkplWorkMode.PROD,
     var stubCase: MkplStubs = MkplStubs.NONE,
@@ -16,6 +17,13 @@ data class MkplContext(
     var timeStart: Instant = Instant.NONE,
     var unitRequest: MkplUnit = MkplUnit(),
     var unitFilterRequest: MkplUnitFilter = MkplUnitFilter(),
+
+    var unitValidating: MkplUnit = MkplUnit(),
+    var unitFilterValidating: MkplUnitFilter = MkplUnitFilter(),
+
+    var unitValidated: MkplUnit = MkplUnit(),
+    var unitFilterValidated: MkplUnitFilter = MkplUnitFilter(),
+
     var unitResponse: MkplUnit = MkplUnit(),
     var unitsResponse: MutableList<MkplUnit> = mutableListOf()
 )

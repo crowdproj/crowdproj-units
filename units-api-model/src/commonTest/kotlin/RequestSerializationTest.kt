@@ -11,9 +11,9 @@ class RequestSerializationTest {
     private val createRequest = UnitCreateRequest(
         requestType = "create",
         requestId = "1",
-        debug = UnitDebug(
-            mode = UnitRequestDebugMode.STUB,
-            stub = UnitRequestDebugStubs.BAD_ID
+        debug = CpBaseDebug(
+            mode = CpRequestDebugMode.STUB,
+            stub = CpRequestDebugStubs.BAD_ID
         ),
         unit = UnitCreateObject(
             name = "kg",
@@ -25,9 +25,9 @@ class RequestSerializationTest {
     private val suggestRequest = UnitSuggestRequest(
         requestType = "suggest",
         requestId = "2",
-        debug = UnitDebug(
-            mode = UnitRequestDebugMode.STUB,
-            stub = UnitRequestDebugStubs.SUCCESS
+        debug = CpBaseDebug(
+            mode = CpRequestDebugMode.STUB,
+            stub = CpRequestDebugStubs.SUCCESS
         ),
         unit = UnitSuggestObject(
             name = "ft",

@@ -7,4 +7,6 @@ data class MkplUnit(
     var description: String = "",
     var status: MkplUnitStatus = MkplUnitStatus.NONE,
     var systemUnitId: MkplSystemUnitId = MkplSystemUnitId.NONE,
-)
+) {
+    fun deepCopy(): MkplUnit = copy()
+}

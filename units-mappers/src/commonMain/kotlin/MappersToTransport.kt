@@ -95,5 +95,5 @@ private fun MkplError.toTransportUnit() = Error(
     code = code.takeIf { it.isNotBlank() },
     group = group.takeIf { it.isNotBlank() },
     field = field.takeIf { it.isNotBlank() },
-    message = message.takeIf { it.isNotBlank() },
+    title = message.takeIf { it.isNotBlank() },
 )

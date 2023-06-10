@@ -15,6 +15,7 @@ dependencies {
     val springmockkVersion: String by project
 
     implementation("org.springframework.boot:spring-boot-starter-actuator") // info; refresh; springMvc output
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux") // Controller, Service, etc..
     implementation("org.springdoc:springdoc-openapi-ui:$springDocOpenApiUiVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin") // from models to json and Vice versa
@@ -28,10 +29,18 @@ dependencies {
 
     // transport models
     implementation(project(":units-common"))
+    implementation(project(":units-lib-logging-logback"))
 
     // API
     implementation(project(":units-api-model"))
     implementation(project(":units-mappers"))
+
+    // Business logic
+    implementation(project(":units-biz"))
+
+    // Logging
+    implementation(project(":units-mappers-log"))
+    implementation(project(":units-api-log"))
 
     // Stubs
     implementation(project(":units-stubs"))

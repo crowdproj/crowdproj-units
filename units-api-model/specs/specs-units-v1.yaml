@@ -142,78 +142,48 @@ components:
   schemas:
 
     IUnitRequest:
-      type: object
-      description: Parent interface for all types of requests
-      properties:
-        requestType:
-          type: string
-          description: Discriminator field to recognize the request type
-          example: create
-        requestId:
-          type: string
-          description: Request id for debugging purposes
-      discriminator:
-        propertyName: requestType
-        mapping:
-          create: '#/components/schemas/UnitCreateRequest'
-          read: '#/components/schemas/UnitReadRequest'
-          update: '#/components/schemas/UnitUpdateRequest'
-          delete: '#/components/schemas/UnitDeleteRequest'
-          search: '#/components/schemas/UnitSearchRequest'
-          suggest: '#/components/schemas/UnitSuggestRequest'
+      allOf:
+        - $ref: '../build/base.yaml#/components/schemas/IRequest'
+        - type: object
+          discriminator:
+            propertyName: requestType
+            mapping:
+              create: '#/components/schemas/UnitCreateRequest'
+              read: '#/components/schemas/UnitReadRequest'
+              update: '#/components/schemas/UnitUpdateRequest'
+              delete: '#/components/schemas/UnitDeleteRequest'
+              search: '#/components/schemas/UnitSearchRequest'
+              suggest: '#/components/schemas/UnitSuggestRequest'
 
     Error:
-      type: object
-      properties:
-        code:
-          type: string
-        group:
-          type: string
-        field:
-          type: string
-        message:
-          type: string
+      $ref: '../build/base.yaml#/components/schemas/Error'
+
+    RequestId:
+      $ref: '../build/base.yaml#/components/schemas/RequestId'
 
     ResponseResult:
-      type: string
-      enum:
-        - success
-        - error
+      $ref: '../build/base.yaml#/components/schemas/ResponseResult'
 
     IUnitResponse:
-      type: object
-      description: Parent interface for all types of responses
-      properties:
-        responseType:
-          type: string
-          description: Discriminator field to recognize the response type
-          example: create
-        requestId:
-          type: string
-          description: Request id for debugging purposes
-        result:
-          $ref: '#/components/schemas/ResponseResult'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-      discriminator:
-        propertyName: responseType
-        mapping:
-          create: '#/components/schemas/UnitCreateResponse'
-          read: '#/components/schemas/UnitReadResponse'
-          update: '#/components/schemas/UnitUpdateResponse'
-          delete: '#/components/schemas/UnitDeleteResponse'
-          search: '#/components/schemas/UnitSearchResponse'
-          suggest: '#/components/schemas/UnitSuggestResponse'
-          init: '#/components/schemas/UnitInitResponse'
+      allOf:
+        - $ref: '../build/base.yaml#/components/schemas/IResponse'
+        - type: object
+          discriminator:
+            propertyName: responseType
+            mapping:
+              create: '#/components/schemas/UnitCreateResponse'
+              read: '#/components/schemas/UnitReadResponse'
+              update: '#/components/schemas/UnitUpdateResponse'
+              delete: '#/components/schemas/UnitDeleteResponse'
+              search: '#/components/schemas/UnitSearchResponse'
+              suggest: '#/components/schemas/UnitSuggestResponse'
+              init: '#/components/schemas/UnitInitResponse'
 
     UnitId:
       type: string
     UnitLock:
       type: string
       description: Optimistic locking version
-
 
     BaseUnit:
       type: object
@@ -241,7 +211,7 @@ components:
     UnitCreateRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -257,7 +227,7 @@ components:
     UnitReadRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -280,7 +250,7 @@ components:
     UnitUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -298,7 +268,7 @@ components:
     UnitDeleteRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -315,7 +285,7 @@ components:
     UnitSearchRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unitFilter:
@@ -328,7 +298,7 @@ components:
     UnitSuggestRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '#/components/schemas/UnitRequestDebug'
+        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -424,35 +394,10 @@ components:
         - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseSingle'
 
-    # STUBS ======================
-    UnitRequestDebugMode:
-      type: string
-      enum:
-        - prod
-        - test
-        - stub
-
-    UnitRequestDebug:
-      type: object
-      properties:
-        debug:
-          $ref: '#/components/schemas/UnitDebug'
-
-    UnitDebug:
-      type: object
-      properties:
-        mode:
-          $ref: '#/components/schemas/UnitRequestDebugMode'
-        stub:
-          $ref: '#/components/schemas/UnitRequestDebugStubs'
-
     UnitRequestDebugStubs:
       type: string
-      description: All the possible debug stubs
+      description: debug stubs for units
       enum:
-        - success
-        - notFound
         - cannotDelete
-        - badId
         - badSearchString
         - badSuggestString
