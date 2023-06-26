@@ -5,13 +5,14 @@ import com.crowdproj.units.biz.MkplUnitProcessor
 import com.crowdproj.units.common.models.MkplCommand
 import com.crowdproj.units.logging.common.MpLoggerProvider
 import com.crowdproj.units.mappers.*
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/unit")
+@RequestMapping("/unit", produces = [MediaType.APPLICATION_JSON_VALUE])
 class UnitController(
     private val processor: MkplUnitProcessor,
     private val loggerProvider: MpLoggerProvider,
@@ -23,7 +24,7 @@ class UnitController(
 
     @PostMapping("read")
     suspend fun readUnit(@RequestBody request: String): String =
-    process<UnitReadRequest, UnitReadResponse>(processor, MkplCommand.READ, requestString = request, loggerProvider.logger(UnitController::class), "unit-read")
+        process<UnitReadRequest, UnitReadResponse>(processor, MkplCommand.READ, requestString = request, loggerProvider.logger(UnitController::class), "unit-read")
 
     @PostMapping("update")
     suspend fun updateUnit(@RequestBody request: String): String =

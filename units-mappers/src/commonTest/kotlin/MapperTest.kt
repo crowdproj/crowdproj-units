@@ -12,9 +12,9 @@ class MapperTest {
     fun fromTransport() {
         val req = UnitCreateRequest(
             requestId = "1234",
-            debug = CpBaseDebug(
-                mode = CpRequestDebugMode.STUB,
-                stub = CpRequestDebugStubs.SUCCESS
+            debug = UnitDebug(
+                mode = UnitRequestDebugMode.STUB,
+                stub = UnitRequestDebugStubs.SUCCESS
             ),
             unit = UnitCreateObject(
                 name = "name",

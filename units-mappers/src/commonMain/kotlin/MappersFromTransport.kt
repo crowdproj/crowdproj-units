@@ -6,7 +6,7 @@ import com.crowdproj.units.common.models.*
 import com.crowdproj.units.common.stubs.MkplStubs
 import com.crowdproj.units.mappers.exceptions.UnknownRequestClass
 
-fun MkplContext.fromTransport(request: IRequest) = when (request) {
+fun MkplContext.fromTransport(request: IUnitRequest) = when (request) {
     is UnitCreateRequest -> fromTransport(request)
     is UnitReadRequest -> fromTransport(request)
     is UnitUpdateRequest -> fromTransport(request)
@@ -27,20 +27,20 @@ private fun String?.toUnitId() = this?.let { MkplUnitId(it) } ?: MkplUnitId.NONE
 private fun String?.toUnitWithId() = MkplUnit(id = this.toUnitId())
 private fun IUnitRequest?.requestId() = this?.requestId?.let { MkplRequestId(it) } ?: MkplRequestId.NONE
 
-private fun CpBaseDebug?.transportToWorkMode(): MkplWorkMode = when (this?.mode) {
-    CpRequestDebugMode.PROD -> MkplWorkMode.PROD
-    CpRequestDebugMode.TEST -> MkplWorkMode.TEST
-    CpRequestDebugMode.STUB -> MkplWorkMode.STUB
+private fun UnitDebug?.transportToWorkMode(): MkplWorkMode = when (this?.mode) {
+    UnitRequestDebugMode.PROD -> MkplWorkMode.PROD
+    UnitRequestDebugMode.TEST -> MkplWorkMode.TEST
+    UnitRequestDebugMode.STUB -> MkplWorkMode.STUB
     null -> MkplWorkMode.PROD
 }
 
-private fun CpBaseDebug?.transportToStubCase(): MkplStubs = when (this?.stub) {
-    CpRequestDebugStubs.SUCCESS -> MkplStubs.SUCCESS
-    CpRequestDebugStubs.NOT_FOUND -> MkplStubs.NOT_FOUND
-    CpRequestDebugStubs.BAD_ID -> MkplStubs.BAD_ID
-//    UnitRequestDebugStubs.CANNOT_DELETE -> MkplStubs.CANNOT_DELETE
-//    UnitRequestDebugStubs.BAD_SEARCH_STRING -> MkplStubs.BAD_SEARCH_STRING
-//    UnitRequestDebugStubs.BAD_SUGGEST_STRING -> MkplStubs.BAD_SUGGEST_STRING
+private fun UnitDebug?.transportToStubCase(): MkplStubs = when (this?.stub) {
+    UnitRequestDebugStubs.SUCCESS -> MkplStubs.SUCCESS
+    UnitRequestDebugStubs.NOT_FOUND -> MkplStubs.NOT_FOUND
+    UnitRequestDebugStubs.BAD_ID -> MkplStubs.BAD_ID
+    UnitRequestDebugStubs.CANNOT_DELETE -> MkplStubs.CANNOT_DELETE
+    UnitRequestDebugStubs.BAD_SEARCH_STRING -> MkplStubs.BAD_SEARCH_STRING
+    UnitRequestDebugStubs.BAD_SUGGEST_STRING -> MkplStubs.BAD_SUGGEST_STRING
     null -> MkplStubs.NONE
 }
 

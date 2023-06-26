@@ -1,7 +1,7 @@
 openapi: 3.0.4
 info:
-  title: Units
-  description: A microservice providing Units of measurements to other services
+  title: 'Marketplace Units service ${VERSION_APP}'
+  description: 'A microservice providing Units of measurements to other services'
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
@@ -18,6 +18,11 @@ paths:
         - unit
       summary: Create a unit
       operationId: unitCreate
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            $ref: '../build/base.yaml#/components/schemas/RequestId'
       requestBody:
         description: Request body
         content:
@@ -39,6 +44,11 @@ paths:
         - unit
       summary: Read a unit
       operationId: unitRead
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            $ref: '../build/base.yaml#/components/schemas/RequestId'
       requestBody:
         description: Request body
         content:
@@ -60,6 +70,11 @@ paths:
         - unit
       summary: Update a unit
       operationId: unitUpdate
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            $ref: '../build/base.yaml#/components/schemas/RequestId'
       requestBody:
         description: Request body
         content:
@@ -81,6 +96,11 @@ paths:
         - unit
       summary: Delete a unit
       operationId: unitDelete
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            $ref: '../build/base.yaml#/components/schemas/RequestId'
       requestBody:
         description: Request body
         content:
@@ -102,6 +122,11 @@ paths:
         - unit
       summary: Search a unit
       operationId: unitSearch
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            $ref: '../build/base.yaml#/components/schemas/RequestId'
       requestBody:
         description: Request body
         content:
@@ -123,6 +148,11 @@ paths:
         - unit
       summary: Suggest a unit
       operationId: unitSuggest
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            $ref: '../build/base.yaml#/components/schemas/RequestId'
       requestBody:
         description: Request body
         content:
@@ -144,6 +174,7 @@ components:
     IUnitRequest:
       allOf:
         - $ref: '../build/base.yaml#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/UnitRequestDebug'
         - type: object
           discriminator:
             propertyName: requestType
@@ -211,7 +242,6 @@ components:
     UnitCreateRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -227,7 +257,6 @@ components:
     UnitReadRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -250,7 +279,6 @@ components:
     UnitUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -268,7 +296,6 @@ components:
     UnitDeleteRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -285,7 +312,6 @@ components:
     UnitSearchRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unitFilter:
@@ -298,7 +324,6 @@ components:
     UnitSuggestRequest:
       allOf:
         - $ref: '#/components/schemas/IUnitRequest'
-        - $ref: '../build/base.yaml#/components/schemas/CpRequestDebug'
         - type: object
           properties:
             unit:
@@ -394,10 +419,35 @@ components:
         - $ref: '#/components/schemas/IUnitResponse'
         - $ref: '#/components/schemas/UnitResponseSingle'
 
+    # STUBS ======================
+    UnitRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    UnitRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/UnitDebug'
+
+    UnitDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/UnitRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/UnitRequestDebugStubs'
+
     UnitRequestDebugStubs:
       type: string
       description: debug stubs for units
       enum:
+        - success
+        - notFound
+        - badId
         - cannotDelete
         - badSearchString
         - badSuggestString

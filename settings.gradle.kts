@@ -3,6 +3,7 @@ rootProject.name = "crowdproj-units"
 pluginManagement {
     val kotlinVersion: String by settings
     val openapiVersion: String by settings
+    val codeGeneratorVersion: String by settings
     val springFrameworkBootVersion: String by settings
     val springDependencyManagementVersion: String by settings
     val pluginSpringVersion: String by settings
@@ -20,6 +21,8 @@ pluginManagement {
         id("io.spring.dependency-management") version springDependencyManagementVersion apply false
         kotlin("plugin.spring") version pluginSpringVersion apply false
         kotlin("plugin.jpa") version pluginJpa apply false
+
+        id("com.crowdproj.generator") version codeGeneratorVersion apply false
 
         id("com.bmuschko.docker-java-application") version bmuschkoVersion apply false
         id("com.bmuschko.docker-remote-api") version bmuschkoVersion apply false
