@@ -21,7 +21,6 @@ class CorConfig {
     fun loggerProvider(): MpLoggerProvider = MpLoggerProvider { mpLoggerLogback(it) }
 
     @Bean
-//    fun prodRepository() = UnitRepoGremlin(properties = (GremlinProperties()))
     fun prodRepository(gremlinProperties: GremlinProperties) = UnitRepoGremlin(properties = gremlinProperties)
 
     @Bean

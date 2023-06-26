@@ -51,7 +51,6 @@ class AppKafkaConsumer(
                 val ctx = MkplContext(
                     timeStart = Clock.System.now(),
                 )
-                println("KEK")
                 val records: ConsumerRecords<String, String> = withContext(Dispatchers.IO) {
                     consumer.poll(Duration.ofSeconds(1))
                 }
