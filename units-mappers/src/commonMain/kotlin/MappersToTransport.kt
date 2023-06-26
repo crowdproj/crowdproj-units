@@ -74,6 +74,7 @@ private fun MkplUnit.toTransportUnit(): UnitResponseObject = UnitResponseObject(
     alias = alias.takeIf { it.isNotBlank() },
     description = description.takeIf { it.isNotBlank() },
     status = status.toTransportUnit(),
+    lock = lock.takeIf { it != MkplUnitLock.NONE }?.asString(),
 //    systemUnitId =
 )
 

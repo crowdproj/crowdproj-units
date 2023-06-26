@@ -1,21 +1,28 @@
 package com.crowdproj.units.biz
 
+import com.crowdproj.kotlin.cor.handlers.chain
 import com.crowdproj.kotlin.cor.handlers.worker
 import com.crowdproj.kotlin.cor.rootChain
-import com.crowdproj.units.biz.groups.operation
-import com.crowdproj.units.biz.groups.stubs
+import com.crowdproj.units.biz.general.operation
+import com.crowdproj.units.biz.general.prepareResult
+import com.crowdproj.units.biz.general.stubs
+import com.crowdproj.units.biz.repo.*
 import com.crowdproj.units.common.MkplContext
 import com.crowdproj.units.common.models.MkplCommand
 import com.crowdproj.units.common.models.MkplUnitId
 import com.crowdproj.units.biz.workers.*
 import com.crowdproj.units.biz.validation.*
+import com.crowdproj.units.common.MkplCorSettings
+import com.crowdproj.units.common.models.MkplState
+import com.crowdproj.units.common.models.MkplUnitLock
 
-class MkplUnitProcessor {
-    suspend fun exec(ctx: MkplContext) = BusinessChain.exec(ctx)
+class MkplUnitProcessor(private val settings: MkplCorSettings = MkplCorSettings()) {
+    suspend fun exec(ctx: MkplContext) = BusinessChain.exec(ctx.apply { settings =  this@MkplUnitProcessor.settings })
 
     companion object {
         private val BusinessChain = rootChain {
             initStatus("Status initialization")
+            initRepo("Repository initialization")
 
             operation("Create a unit", MkplCommand.CREATE) {
                 stubs("Processing stubs") {
@@ -38,6 +45,12 @@ class MkplUnitProcessor {
 
                     finishUnitValidation("Validation completed")
                 }
+                chain {
+                    title = "Saving unit to DB logic"
+                    repoPrepareCreate("Preparing object to save")
+                    repoCreate("Creating unit in DB")
+                }
+                prepareResult("Preparing response")
             }
 
             operation("Get a unit", MkplCommand.READ) {
@@ -57,6 +70,16 @@ class MkplUnitProcessor {
 
                     finishUnitValidation("Validation completed")
                 }
+                chain {
+                    title = "Reading unit from DB logic"
+                    repoRead("Reading unit from DB")
+                    worker {
+                        title = "Preparing Read response"
+                        on { state == MkplState.RUNNING }
+                        handle { unitRepoDone = unitRepoRead }
+                    }
+                }
+                prepareResult("Preparing response")
             }
 
             operation("Update a unit", MkplCommand.UPDATE) {
@@ -73,6 +96,7 @@ class MkplUnitProcessor {
                     worker("Clearing name") { unitValidating.name = unitValidating.name.trim() }
                     worker("Clearing description") { unitValidating.description = unitValidating.description.trim() }
                     worker("Clearing alias field") { unitValidating.alias = unitValidating.alias.trim() }
+                    worker("Clearing lock field") { unitValidating.lock = MkplUnitLock(unitValidating.lock.asString().trim()) }
 
                     validateIdNotEmpty("Validating ID is not empty")
                     validateIdProperFormat("Validating ID format")
@@ -81,8 +105,18 @@ class MkplUnitProcessor {
                     validateAliasNotEmpty("Validating alias is not empty")
                     validateAliasHasContent("Validating chars")
 
+                    validateLockNotEmpty("Validation lock is not empty")
+                    validateLockProperFormat("Validation lock format")
+
                     finishUnitValidation("Validation completed")
                 }
+                chain {
+                    title = "Saving unit to DB logic"
+                    repoRead("Reading unit from DB")
+                    repoPrepareUpdate("Preparing object to update")
+                    repoUpdate("Updating unit from DB")
+                }
+                prepareResult("Preparing response")
             }
 
             operation("Delete a unit", MkplCommand.DELETE) {
@@ -96,12 +130,23 @@ class MkplUnitProcessor {
                 validation {
                     worker("Copying fields to unitValidating") { unitValidating = unitRequest.deepCopy() }
                     worker("Clearing ID") { unitValidating.id = MkplUnitId(unitValidating.id.asString().trim()) }
+                    worker("Сlearing lock") { unitValidating.lock = MkplUnitLock(unitValidating.lock.asString().trim()) }
 
                     validateIdNotEmpty("Validating ID is not empty")
                     validateIdProperFormat("Validating ID format")
 
+                    validateLockNotEmpty("Validation lock is not empty")
+                    validateLockProperFormat("Validation lock format")
+
                     finishUnitValidation("Validation completed")
                 }
+                chain {
+                    title = "Delete unit logic"
+                    repoRead("Reading unit from DB")
+                    repoPrepareDelete("Preparing object to delete")
+                    repoDelete("Deleting unit from DB")
+                }
+                prepareResult("Preparing response")
             }
 
             operation("Search a unit", MkplCommand.SEARCH) {
@@ -117,6 +162,9 @@ class MkplUnitProcessor {
 
                     finishUnitFilterValidation("Validation completed")
                 }
+
+                repoSearch("Searching unit(s) by filter")
+                prepareResult("Preparing response")
             }
 
             operation("Suggest a unit", MkplCommand.SUGGEST) {
@@ -137,8 +185,11 @@ class MkplUnitProcessor {
                     validateAliasNotEmpty("Validating alias is not empty")
                     validateAliasHasContent("Validating chars")
 
-                    finishUnitFilterValidation("Validation completed")
+                    finishUnitValidation("Validation completed")
                 }
+                repoPrepareSuggest("Preparing object to save")
+                repoSuggest("Creating suggested unit in DB")
+                prepareResult("Preparing response")
             }
         }.build()
     }

@@ -23,6 +23,7 @@ fun validationNameCorrect(command: MkplCommand, processor: MkplUnitProcessor) = 
             alias = "abc",
             description = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -41,6 +42,7 @@ fun validationNameTrim(command: MkplCommand, processor: MkplUnitProcessor) = run
             description = "abc",
             alias = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -62,6 +64,7 @@ fun validationNameEmpty(command: MkplCommand, processor: MkplUnitProcessor) = ru
             description = "abc",
             alias = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -84,6 +87,7 @@ fun validationNameSymbols(command: MkplCommand, processor: MkplUnitProcessor) = 
             description = "abc",
             alias = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)

@@ -30,17 +30,17 @@ suspend inline fun <reified Q : IRequest, @Suppress("unused") reified R : IUnitR
         logger.doWithLogging(id = logId) {
             val request = apiMapper.decodeFromString<Q>(requestString)
             ctx.fromTransport(request)
+            logger.info(
+                msg = "got $command request" ,
+                data = ctx.toLog("${logId}-got")
+            )
+            processor.exec(ctx)
+            logger.info(
+                msg = "$command request is handled",
+                data = ctx.toLog("${logId}-handled")
+            )
+            apiMapper.encodeToString(ctx.toTransportUnit())
         }
-        logger.info(
-            msg = "got $command request" ,
-            data = ctx.toLog("${logId}-got")
-        )
-        processor.exec(ctx)
-        logger.info(
-            msg = "$command request is handled",
-            data = ctx.toLog("${logId}-handled")
-        )
-        apiMapper.encodeToString(ctx.toTransportUnit())
     } catch (e: Throwable) {
         logger.doWithLogging(id = "${logId}-failure") {
             command?.also { ctx.command = it }

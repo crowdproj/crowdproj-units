@@ -21,6 +21,7 @@ fun validationIdCorrect(command: MkplCommand, processor: MkplUnitProcessor) = ru
             description = "abc",
             alias = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -40,6 +41,7 @@ fun validationIdTrim(command: MkplCommand, processor: MkplUnitProcessor) = runTe
             description = "abc",
             alias = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -59,6 +61,7 @@ fun validationIdEmpty(command: MkplCommand, processor: MkplUnitProcessor) = runT
             description = "abc",
             alias = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -81,6 +84,7 @@ fun validationIdFormat(command: MkplCommand, processor: MkplUnitProcessor) = run
             description = "abc",
             alias = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)

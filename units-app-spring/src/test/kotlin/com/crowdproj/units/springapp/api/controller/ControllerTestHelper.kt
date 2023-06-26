@@ -1,8 +1,8 @@
 package com.crowdproj.units.springapp.api.controller
 
-inline fun <reified Req : Any> getJsonOutputDependingOnResponseClass(
+fun getJsonOutputDependingOnResponseClass(
     responseType: String,
-    responseClassSimpleName: Req,
+    responseClassSimpleName: String,
 ): String =
     "{" +
         "\"_\":\"com.crowdproj.units.api.v1.models.${responseClassSimpleName}\"," +

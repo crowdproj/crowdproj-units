@@ -1,4 +1,4 @@
-package com.crowdproj.units.biz.groups
+package com.crowdproj.units.biz.general
 
 import com.crowdproj.kotlin.cor.ICorAddExecDsl
 import com.crowdproj.kotlin.cor.handlers.chain

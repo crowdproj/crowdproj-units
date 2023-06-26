@@ -15,7 +15,6 @@ dependencies {
     val springmockkVersion: String by project
 
     implementation("org.springframework.boot:spring-boot-starter-actuator") // info; refresh; springMvc output
-    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux") // Controller, Service, etc..
     implementation("org.springdoc:springdoc-openapi-ui:$springDocOpenApiUiVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin") // from models to json and Vice versa
@@ -30,6 +29,7 @@ dependencies {
     // transport models
     implementation(project(":units-common"))
     implementation(project(":units-lib-logging-logback"))
+    implementation(project(":units-lib-logging-kermit"))
 
     // API
     implementation(project(":units-api-model"))
@@ -37,6 +37,11 @@ dependencies {
 
     // Business logic
     implementation(project(":units-biz"))
+
+    // Repository
+    implementation(project(":units-repo-stubs"))
+    implementation(project(":units-repo-in-memory"))
+    implementation(project(":units-repo-gremlin"))
 
     // Logging
     implementation(project(":units-mappers-log"))
@@ -51,8 +56,9 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux") // Controller, Service, etc..
-    testImplementation("com.ninja-squad:springmockk:3.0.1") // mockking beans
+    testImplementation("com.ninja-squad:springmockk:$springmockkVersion") // mockking beans
     testImplementation("org.assertj:assertj-core:$assertjVersion")
+    testImplementation(project(":units-repo-in-memory"))
 }
 
 tasks {

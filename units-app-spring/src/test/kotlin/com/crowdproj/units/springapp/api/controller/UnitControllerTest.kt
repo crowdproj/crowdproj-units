@@ -4,6 +4,7 @@ import com.crowdproj.units.api.v1.models.*
 import com.crowdproj.units.biz.MkplUnitProcessor
 import com.crowdproj.units.common.MkplContext
 import com.crowdproj.units.mappers.*
+import com.crowdproj.units.repo.gremlin.UnitRepoGremlin
 import com.crowdproj.units.springapp.config.CorConfig
 import com.crowdproj.units.springapp.controller.UnitController
 import com.ninjasquad.springmockk.MockkBean
@@ -26,11 +27,14 @@ internal class UnitControllerTest {
     @MockkBean(relaxUnitFun = true)
     private lateinit var processor: MkplUnitProcessor
 
+    @MockkBean
+    private lateinit var repo: UnitRepoGremlin
+
     @Test
     fun createUnit() = testStubUnit(
         "/unit/create",
         UnitCreateRequest(),
-        MkplContext().apply { unitResponse = MkplUnitStub.get() }.toTransportCreate()
+        MkplContext().toTransportCreate()
     )
 
     @Test

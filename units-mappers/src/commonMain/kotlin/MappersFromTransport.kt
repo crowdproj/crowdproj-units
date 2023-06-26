@@ -16,6 +16,13 @@ fun MkplContext.fromTransport(request: IRequest) = when (request) {
     else -> throw UnknownRequestClass(request::class)
 }
 
+private fun String?.toUnitLock() = this?.let { MkplUnitLock(it) } ?: MkplUnitLock.NONE
+private fun UnitReadObject?.toInternal() = if (this != null) {
+    MkplUnit(id = id.toUnitId())
+} else {
+    MkplUnit.NONE
+}
+
 private fun String?.toUnitId() = this?.let { MkplUnitId(it) } ?: MkplUnitId.NONE
 private fun String?.toUnitWithId() = MkplUnit(id = this.toUnitId())
 private fun IUnitRequest?.requestId() = this?.requestId?.let { MkplRequestId(it) } ?: MkplRequestId.NONE
@@ -48,7 +55,7 @@ fun MkplContext.fromTransport(request: UnitCreateRequest) {
 fun MkplContext.fromTransport(request: UnitReadRequest) {
     command = MkplCommand.READ
     requestId = request.requestId()
-    unitRequest = request.unit?.id.toUnitWithId()
+    unitRequest = request.unit.toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
@@ -64,9 +71,19 @@ fun MkplContext.fromTransport(request: UnitUpdateRequest) {
 fun MkplContext.fromTransport(request: UnitDeleteRequest) {
     command = MkplCommand.DELETE
     requestId = request.requestId()
-    unitRequest = request.unit?.toInternal() ?: MkplUnit()
+    unitRequest = request.unit.toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
+}
+
+private fun UnitDeleteObject?.toInternal(): MkplUnit = if (this != null) {
+    MkplUnit(
+        id = id.toUnitId(),
+        lock = lock.toUnitLock(),
+        status = MkplUnitStatus.DELETED,
+    )
+} else {
+    MkplUnit.NONE
 }
 
 fun MkplContext.fromTransport(request: UnitSearchRequest) {
@@ -97,17 +114,13 @@ private fun UnitCreateObject.toInternal(): MkplUnit = MkplUnit(
 //    systemUnitId = this.systemUnitId.fromTransport()
 )
 
-private fun UnitDeleteObject.toInternal(): MkplUnit = MkplUnit(
-    id = this.id.toUnitId(),
-    status = MkplUnitStatus.DELETED
-)
-
 private fun UnitUpdateObject.toInternal(): MkplUnit = MkplUnit(
     id = this.id.toUnitId(),
     name = this.name ?: "",
     alias = this.alias ?: "",
     description = this.description ?: "",
     status = this.status.fromTransport(),
+    lock = this.lock.toUnitLock(),
 //    systemUnitId = this.systemUnitId.fromTransport()
 )
 

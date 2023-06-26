@@ -1,7 +1,9 @@
 package com.crowdproj.units.biz.test.validation
 
 import com.crowdproj.units.biz.MkplUnitProcessor
+import com.crowdproj.units.common.MkplCorSettings
 import com.crowdproj.units.common.models.MkplCommand
+import com.crowdproj.units.repo.stubs.UnitRepoStub
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlin.test.Test
 
@@ -9,7 +11,12 @@ import kotlin.test.Test
 class BizValidationDeleteTest {
 
     private val command = MkplCommand.DELETE
-    private val processor by lazy { MkplUnitProcessor() }
+    private val settings by lazy {
+        MkplCorSettings(
+            repoTest = UnitRepoStub()
+        )
+    }
+    private val processor by lazy { MkplUnitProcessor(settings) }
 
     @Test
     fun correctId() = validationIdCorrect(command, processor)
@@ -19,6 +26,9 @@ class BizValidationDeleteTest {
 
     @Test
     fun emptyId() = validationIdEmpty(command, processor)
+
+    @Test
+    fun correctLock() = validationLockCorrect(command, processor)
 
     @Test
     fun badFormatId() = validationIdFormat(command, processor)

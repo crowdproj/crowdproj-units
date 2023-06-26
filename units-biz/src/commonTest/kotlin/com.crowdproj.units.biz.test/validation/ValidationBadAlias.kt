@@ -23,6 +23,7 @@ fun validationAliasCorrect(command: MkplCommand, processor: MkplUnitProcessor) =
             alias = "abc",
             description = "abc",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -41,6 +42,7 @@ fun validationAliasTrim(command: MkplCommand, processor: MkplUnitProcessor) = ru
             description = "abc",
             alias = " \n\t abc \t\n ",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -61,6 +63,7 @@ fun validationAliasEmpty(command: MkplCommand, processor: MkplUnitProcessor) = r
             description = "abc",
             alias = "",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -83,6 +86,7 @@ fun validationAliasSymbols(command: MkplCommand, processor: MkplUnitProcessor) =
             description = "abc",
             alias = "!@#\$%^&*(),.{}",
             status = MkplUnitStatus.CONFIRMED,
+            lock = MkplUnitLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)

@@ -36,7 +36,11 @@ include("units-app-spring")
 include("units-app-kafka")
 
 include("units-biz")
-include("units-lib-cor")
+
+include("units-repo-tests")
+include("units-repo-in-memory")
+include("units-repo-stubs")
+include("units-repo-gremlin")
 
 include("units-lib-logging-common")
 include("units-lib-logging-kermit")
