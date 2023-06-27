@@ -21,13 +21,14 @@ or include working with measurement units. This audience can be subsequently div
 
 ### Main Functions (API Endpoints)
 - CRUD (Create, read, update, delete) and search measurement units
-- Convert units from metric system to imperial and vice versa
 
 ### Unit Entity Fields
 1. id
 2. name
 3. description
-4. aliases
+4. alias
+5. status
+6. systemUnitId
 
 ## Architecture Diagram
 

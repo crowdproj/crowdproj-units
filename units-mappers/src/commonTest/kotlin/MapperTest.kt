@@ -68,6 +68,6 @@ class MapperTest {
         assertEquals("err", req.errors?.firstOrNull()?.code)
         assertEquals("request", req.errors?.firstOrNull()?.group)
         assertEquals("name", req.errors?.firstOrNull()?.field)
-        assertEquals("wrong name", req.errors?.firstOrNull()?.message)
+        assertEquals("wrong name", req.errors?.firstOrNull()?.title)
     }
 }

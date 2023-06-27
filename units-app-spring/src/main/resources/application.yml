@@ -17,4 +17,11 @@ springdoc:
   swagger-ui:
     urls:
       - name: v1
-        url: specs-units.yaml
+        url: specs-units-v1.yaml
+
+gremlin:
+  hosts: ${GREMLIN_HOSTS:localhost}
+  port: ${GREMLIN_PORT:8182}
+  enableSsl: ${GREMLIN_ENABLESSL:false}
+  user: ${GREMLIN_USER:root}
+  pass: ${GREMLIN_PASSWORD:root_root}

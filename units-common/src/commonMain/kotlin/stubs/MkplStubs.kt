@@ -7,5 +7,6 @@ enum class MkplStubs {
     CANNOT_DELETE,
     BAD_ID,
     BAD_SEARCH_STRING,
-    BAD_SUGGEST_STRING
+    BAD_SUGGEST_STRING,
+    DB_ERROR,
 }

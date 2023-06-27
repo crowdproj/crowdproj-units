@@ -36,12 +36,15 @@ docker {
 dependencies {
     val kafkaVersion: String by project
     val coroutinesVersion: String by project
+    val serializationVersion: String by project
     val atomicfuVersion: String by project
     val logbackVersion: String by project
     val kotlinLoggingJvmVersion: String by project
     implementation("org.apache.kafka:kafka-clients:$kafkaVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:atomicfu:$atomicfuVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
 
     // log
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
@@ -56,4 +59,17 @@ dependencies {
     implementation(project(":units-biz"))
 
     testImplementation(kotlin("test-junit"))
+}
+
+tasks.withType<Jar> {
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
 }

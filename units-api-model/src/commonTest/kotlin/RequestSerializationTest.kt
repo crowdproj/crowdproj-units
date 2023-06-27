@@ -4,12 +4,10 @@ import com.crowdproj.units.api.v1.models.*
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class RequestSerializationTest {
     private val createRequest = UnitCreateRequest(
-        requestType = "create",
         requestId = "1",
         debug = UnitDebug(
             mode = UnitRequestDebugMode.STUB,
@@ -23,7 +21,6 @@ class RequestSerializationTest {
     )
 
     private val suggestRequest = UnitSuggestRequest(
-        requestType = "suggest",
         requestId = "2",
         debug = UnitDebug(
             mode = UnitRequestDebugMode.STUB,
@@ -38,7 +35,7 @@ class RequestSerializationTest {
 
     @Test
     fun serializeCreateRequest() {
-        val json = apiMapper.encodeToString(createRequest)
+        val json = Json.encodeToString(IUnitRequest.serializer(), createRequest)
 
         assertContains(json, Regex("\"name\":\\s*\"kg\""))
         assertContains(json, Regex("\"mode\":\\s*\"stub\""))
@@ -48,15 +45,15 @@ class RequestSerializationTest {
 
     @Test
     fun deserializeCreateRequest() {
-        val json = apiMapper.encodeToString(createRequest)
-        val obj = apiMapper.decodeFromString(json) as UnitCreateRequest
+        val json = Json.encodeToString(IUnitRequest.serializer(), createRequest)
+        val obj = Json.decodeFromString(IUnitRequest.serializer(), json) as UnitCreateRequest
 
         assertEquals(createRequest, obj)
     }
 
     @Test
     fun serializeSuggestRequest() {
-        val json = apiMapper.encodeToString(suggestRequest)
+        val json = Json.encodeToString(IUnitRequest.serializer(), suggestRequest)
 
         assertContains(json, Regex("\"requestType\":\\s*\"suggest\""))
     }

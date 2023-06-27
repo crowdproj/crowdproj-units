@@ -1,7 +1,20 @@
 plugins {
     kotlin("multiplatform")
-    id("org.openapi.generator")
-    kotlin("plugin.serialization")
+    id("com.crowdproj.generator")
+//    kotlin("plugin.serialization")
+}
+
+val apiVersion = "v1"
+val apiSpec: Configuration by configurations.creating
+val apiSpecVersion: String by project
+dependencies {
+    apiSpec(
+        group = "com.crowdproj",
+        name = "specs-v0",
+        version = apiSpecVersion,
+        classifier = "openapi",
+        ext = "yaml"
+    )
 }
 
 kotlin {
@@ -40,43 +53,37 @@ kotlin {
     }
 }
 
-/**
- * Настраиваем генерацию здесь
- */
-openApiGenerate {
-    val openapiGroup = "${rootProject.group}.api.v1"
-    generatorName.set("kotlin")
-    packageName.set(openapiGroup)
-    apiPackage.set("$openapiGroup.api")
-    modelPackage.set("$openapiGroup.models")
-    invokerPackage.set("$openapiGroup.invoker")
-    inputSpec.set("$projectDir/specs/specs-units.yaml")
-    library.set("multiplatform")
+crowdprojGenerate {
+    packageName.set("${rootProject.group}.api.v1")
+    inputSpec.set("$projectDir/specs/specs-units-$apiVersion.yaml")
+}
 
-    /**
-     * Здесь указываем, что нам нужны только модели, все остальное не нужно
-     */
-    globalProperties.apply {
-        put("models", "")
-        put("modelDocs", "false")
+val getSpecs: Task by tasks.creating {
+    doFirst {
+        copy {
+            from("${rootProject.projectDir}/specs")
+            into(project.buildDir.toString())
+        }
+        copy {
+            from(apiSpec.asPath)
+            into("$buildDir")
+            rename { "base.yaml" }
+        }
     }
+}
 
-    /**
-     * Настройка дополнительных параметров из документации по генератору
-     * https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/kotlin.md
-     */
-    configOptions.set(
-        mapOf(
-            "dateLibrary" to "string",
-            "enumPropertyNaming" to "UPPERCASE",
-            "collectionType" to "list",
-        )
-    )
+tasks {
+    this.openApiGenerate {
+        dependsOn(getSpecs)
+    }
 }
 
 afterEvaluate {
     val openApiGenerate = tasks.getByName("openApiGenerate")
     tasks.filter { it.name.startsWith("compile") }.forEach {
+        it.dependsOn(openApiGenerate)
+    }
+    tasks.filter { it.name.endsWith("Elements") }.forEach {
         it.dependsOn(openApiGenerate)
     }
 }

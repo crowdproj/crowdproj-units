@@ -15,6 +15,8 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
+                val kotlinCorVersion: String by project
+                implementation("com.crowdproj:kotlin-cor:$kotlinCorVersion")
                 implementation(kotlin("stdlib-common"))
 
                 implementation(project(":units-common"))
@@ -26,6 +28,10 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+
+                implementation(project(":units-repo-stubs"))
+                implementation(project(":units-repo-tests"))
+                implementation(project(":units-repo-in-memory"))
 
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }

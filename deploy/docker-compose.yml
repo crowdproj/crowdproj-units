@@ -1,0 +1,117 @@
+version: '3'
+
+services:
+  app:
+    build: ../units-app-spring
+    image: units-app-spring
+    ports:
+      - "8080:8080"
+    depends_on:
+      - fluent-bit
+      - gremlin
+      - kafka
+    links:
+      - zookeeper
+      - kafka
+    environment:
+      - LOGS_FB_HOSTS=fluent-bit
+      - LOGS_FB_PORT=24224
+      - DB_TYPE_PROD=gremlin
+      - GREMLIN_HOSTS=localhost
+      - GREMLIN_PORT=8182
+      - GREMLIN_USER=root
+      - GREMLIN_PASS=root_root
+      - GREMLIN_ENABLESSL=false
+      - KAFKA_HOSTS=kafka:9092
+      - KAFKA_TOPIC_IN=marketplace-in
+      - KAFKA_TOPIC_OUT=marketplace-out
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+
+  fluent-bit:
+    container_name: fluent-bit
+    image: fluent/fluent-bit
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+      - "2020:2020"
+    environment:
+      - opensearch_host=opensearch
+      - opensearch_user=admin
+      - opensearch_pass=admin
+    volumes:
+      - ./volumes/fluent-bit-etc/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./volumes/fluent-bit-etc/parsers.conf:/fluent-bit/etc/parsers.conf
+
+  opensearch:
+    container_name: opensearch
+    image: opensearchproject/opensearch:latest
+    environment:
+      - discovery.type=single-node
+      - http.port=9200
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - '9200:9200'
+      - '9600:9600'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+
+  dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    ports:
+      - '5601:5601'
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
+    depends_on:
+      - opensearch
+
+  gremlin:
+    image: "arcadedata/arcadedb:23.4.1"
+    container_name: gremlin
+    ports:
+      - "2480:2480"
+      - "2424:2424"
+      - "8182:8182"
+    volumes:
+      - gremlin_data:/home/arcadedb/databases
+    environment:
+      JAVA_OPTS: "-Darcadedb.server.rootPassword=root_root -Darcadedb.server.plugins=GremlinServer:com.arcadedb.server.gremlin.GremlinServerPlugin"
+
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    expose:
+      - "2181"
+
+  kafka:
+    image: wurstmeister/kafka:2.13-2.7.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9094:9094"
+    volumes:
+      - ./kfdata:/kafka
+    links:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,OUTSIDE://localhost:9094
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,OUTSIDE://0.0.0.0:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+volumes:
+  opensearch-data:
+  gremlin_data:
